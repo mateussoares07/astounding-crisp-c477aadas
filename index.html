@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/mateu/Downloads/gestao-financeira_2.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestão Financeira</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f8f7f4;--surface:#ffffff;--surface2:#f1f0ec;--border:#e2e1dc;--border2:#d0cfc9;
+    --text:#1a1a18;--text2:#6b6a65;--text3:#9e9d98;
+    --green:#1D9E75;--green-bg:#e1f5ee;--green-text:#085041;
+    --red:#D85A30;--red-bg:#faece7;--red-text:#712B13;
+    --blue:#185FA5;--blue-bg:#e6f1fb;--blue-text:#0C447C;
+    --amber:#BA7517;--amber-bg:#faeeda;--amber-text:#633806;
+    --radius:8px;--radius-lg:12px;
+  }
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+
+  .page{display:none;padding:1.5rem;max-width:860px;margin:0 auto}
+  .page.active{display:block}
+
+  /* HOME */
+  .home-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+  .home-logo{font-size:28px;font-weight:600;margin-bottom:6px;letter-spacing:-0.5px}
+  .home-sub{color:var(--text2);margin-bottom:3rem;font-size:15px}
+  .home-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:500px}
+  .home-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem 1.5rem;cursor:pointer;transition:border-color .15s,transform .1s,box-shadow .15s;text-align:center}
+  .home-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06)}
+  .home-card .icon{font-size:32px;margin-bottom:1rem}
+  .home-card .label{font-size:17px;font-weight:600;margin-bottom:5px}
+  .home-card .desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+  /* NAV */
+  .nav{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+  .nav-title{font-size:18px;font-weight:600;flex:1}
+  .nav-back{cursor:pointer;font-size:13px;color:var(--text2);display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  .nav-back:hover{background:var(--surface2)}
+
+  /* BUTTONS */
+  .btn{padding:7px 14px;border:1px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);display:inline-flex;align-items:center;gap:6px;transition:background .12s}
+  .btn:hover{background:var(--surface2)}
+  .btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+  .btn-primary:hover{opacity:.85}
+  .btn-success{background:var(--green-bg);color:var(--green-text);border-color:rgba(29,158,117,.3)}
+  .btn-success:hover{opacity:.85}
+  .btn-danger{background:var(--red-bg);color:var(--red-text);border-color:rgba(216,90,48,.3)}
+  .btn-danger:hover{opacity:.85}
+  .btn-ghost{background:transparent;border:none;color:var(--text2);padding:6px 8px}
+  .btn-ghost:hover{background:var(--surface2)}
+
+  /* STATS */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem}
+  .stat-card{background:var(--surface2);border-radius:var(--radius);padding:14px}
+  .stat-label{font-size:11px;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+  .stat-val{font-size:20px;font-weight:600}
+  .stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+  /* TABS */
+  .tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--surface2);padding:3px;border-radius:var(--radius);width:fit-content}
+  .tab{padding:6px 14px;font-size:13px;border-radius:6px;cursor:pointer;color:var(--text2);transition:all .12s;white-space:nowrap;font-family:inherit;border:none;background:none}
+  .tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+  /* TOOLBAR */
+  .toolbar{display:flex;gap:8px;margin-bottom:1rem;align-items:center}
+  .search-input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text)}
+  .search-input:focus{outline:none;border-color:var(--blue)}
+
+  /* CARDS */
+  .card-list{display:flex;flex-direction:column;gap:10px}
+  .item-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;cursor:pointer;transition:border-color .12s}
+  .item-card:hover{border-color:var(--border2)}
+  .item-card.no-click{cursor:default}
+  .item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+  .item-name{font-size:15px;font-weight:600}
+  .item-sub{font-size:12px;color:var(--text2);margin-top:2px}
+  .item-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+  .meta-item{font-size:12px;color:var(--text2)}
+  .meta-item strong{display:block;font-size:13px;color:var(--text);font-weight:500;margin-top:1px}
+  .progress-bar{height:4px;background:var(--surface2);border-radius:4px;margin-top:10px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--green);border-radius:4px;transition:width .3s}
+  .item-actions{display:flex;gap:8px;margin-top:10px}
+
+  /* BADGES */
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap}
+  .badge-ativo{background:var(--green-bg);color:var(--green-text)}
+  .badge-quitado{background:var(--surface2);color:var(--text2)}
+  .badge-pendente{background:var(--amber-bg);color:var(--amber-text)}
+  .badge-pago{background:var(--green-bg);color:var(--green-text)}
+  .badge-atraso{background:var(--red-bg);color:var(--red-text)}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+  .modal-overlay.hidden{display:none}
+  .modal{background:var(--surface);border-radius:var(--radius-lg);padding:1.5rem;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+  .modal h2{font-size:17px;font-weight:600;margin-bottom:1.25rem}
+  .field{margin-bottom:1rem}
+  .field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500}
+  .field input,.field select,.field textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);transition:border-color .12s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue)}
+  .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border)}
+
+  /* DETAIL */
+  .detail-section{background:var(--surface2);border-radius:var(--radius);padding:1rem;margin-bottom:1rem}
+  .detail-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)}
+  .detail-row:last-child{border-bottom:none}
+  .detail-row span:first-child{color:var(--text2)}
+  .detail-row span:last-child{font-weight:500}
+  .hist-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px;border-bottom:1px solid var(--border)}
+  .hist-item:last-child{border-bottom:none}
+  .hist-sub{color:var(--text2);font-size:12px;margin-top:2px}
+  .tpos{color:var(--green-text);font-weight:600}
+
+  /* SIMULATION */
+  .sim-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem}
+  .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem}
+  .sim-field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:500}
+  .sim-field input,.sim-field select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text)}
+  .sim-field input:focus,.sim-field select:focus{outline:none;border-color:var(--blue)}
+  .sim-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+  .sim-stat{background:var(--surface2);border-radius:var(--radius);padding:12px}
+  .sim-stat-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+  .sim-stat-val{font-size:17px;font-weight:600}
+  .sim-table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+  .sim-table{width:100%;border-collapse:collapse;font-size:12px}
+  .sim-table th{background:var(--surface2);padding:8px 10px;text-align:left;font-weight:500;font-size:11px;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap}
+  .sim-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+  .sim-table tr:last-child td{border-bottom:none}
+  .sim-table tr:nth-child(even) td{background:var(--bg)}
+  .bar-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:3px}
+  .bar-juros{height:100%;background:var(--red);border-radius:3px}
+  .bar-cap{height:100%;background:var(--green);border-radius:3px}
+  .legend{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--text2)}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+  /* MONTH */
+  .month-group{margin-bottom:1.5rem}
+  .month-header{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;text-transform:uppercase;letter-spacing:.5px}
+
+  .empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px}
+  .empty-icon{font-size:36px;margin-bottom:10px}
+  .section-title{font-size:15px;font-weight:600;margin-bottom:1rem}
+
+  @media(max-width:500px){
+    .home-grid{grid-template-columns:1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .stats-row{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="p-home" class="page active">
+  <div class="home-wrap">
+    <div class="home-logo">💼 Gestão Financeira</div>
+    <div class="home-sub">Selecione o módulo que deseja acessar</div>
+    <div class="home-grid">
+      <div class="home-card" onclick="goTo(&#39;emprestimos&#39;)">
+        <div class="icon">💰</div>
+        <div class="label">Empréstimos</div>
+        <div class="desc">Controle empréstimos, juros compostos e pagamentos</div>
+      </div>
+      <div class="home-card" onclick="goTo(&#39;alugueis&#39;)">
+        <div class="icon">🏠</div>
+        <div class="label">Aluguéis</div>
+        <div class="desc">Gerencie imóveis, inquilinos e mensalidades</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EMPRÉSTIMOS -->
+<div id="p-emprestimos" class="page">
+  <div class="nav">
+    <button class="nav-back" onclick="goTo(&#39;home&#39;)">← Início</button>
+    <span class="nav-title">Empréstimos</span>
+    <button class="btn btn-primary" onclick="openModal(&#39;emp&#39;)">+ Novo empréstimo</button>
+  </div>
+  <div class="stats-row" id="emp-stats"></div>
+  <div class="tabs">
+    <button class="tab active" onclick="empTab(&#39;ativos&#39;,this)">Ativos</button>
+    <button class="tab" onclick="empTab(&#39;todos&#39;,this)">Todos</button>
+    <button class="tab" onclick="empTab(&#39;quitados&#39;,this)">Quitados</button>
+    <button class="tab" onclick="empTab(&#39;simulacao&#39;,this)">⚡ Simulação</button>
+  </div>
+  <div class="toolbar" id="emp-toolbar">
+    <input class="search-input" type="text" id="emp-search" placeholder="Buscar por nome..." oninput="renderEmp()">
+  </div>
+  <div id="emp-list" class="card-list"></div>
+  <div id="emp-sim" style="display:none"></div>
+</div>
+
+<!-- DETALHE EMPRÉSTIMO -->
+<div id="p-emp-detail" class="page">
+  <div class="nav">
+    <button class="nav-back" onclick="goTo(&#39;emprestimos&#39;)">← Empréstimos</button>
+    <span class="nav-title" id="detail-name">Detalhes</span>
+    <button class="btn btn-success" onclick="openPagModal()">💳 Registrar pagamento</button>
+  </div>
+  <div id="emp-detail-body"></div>
+</div>
+
+<!-- ALUGUÉIS -->
+<div id="p-alugueis" class="page">
+  <div class="nav">
+    <button class="nav-back" onclick="goTo(&#39;home&#39;)">← Início</button>
+    <span class="nav-title">Aluguéis</span>
+    <button class="btn btn-primary" onclick="openModal(&#39;imov&#39;)">+ Novo imóvel</button>
+  </div>
+  <div class="stats-row" id="alug-stats"></div>
+  <div class="tabs">
+    <button class="tab active" onclick="alugTab(&#39;imoveis&#39;,this)">Imóveis</button>
+    <button class="tab" onclick="alugTab(&#39;pagamentos&#39;,this)">Pagamentos do mês</button>
+    <button class="tab" onclick="alugTab(&#39;historico&#39;,this)">Histórico</button>
+  </div>
+  <div id="alug-body"></div>
+</div>
+
+<!-- DETALHE IMÓVEL -->
+<div id="p-imov-detail" class="page">
+  <div class="nav">
+    <button class="nav-back" onclick="goTo(&#39;alugueis&#39;)">← Aluguéis</button>
+    <span class="nav-title" id="imov-detail-name">Imóvel</span>
+    <button class="btn btn-danger" id="imov-detail-del-btn">🗑 Excluir</button>
+  </div>
+  <div id="imov-detail-body"></div>
+</div>
+
+<!-- MODAL NOVO EMPRÉSTIMO -->
+<div id="modal-emp" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>Novo empréstimo</h2>
+    <div class="field"><label>Nome do devedor *</label><input id="e-nome" type="text" placeholder="Ex: João Silva"></div>
+    <div class="field"><label>Valor emprestado (R$) *</label><input id="e-valor" type="number" min="0" step="0.01" placeholder="0,00"></div>
+    <div class="field"><label>Taxa de juros mensal (%) *</label><input id="e-juros" type="number" min="0" step="0.01" placeholder="Ex: 5"></div>
+    <div class="field"><label>Data do empréstimo *</label><input id="e-data" type="date"></div>
+    <div class="field"><label>Observações</label><input id="e-obs" type="text" placeholder="Opcional"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal(&#39;emp&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEmp()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGAMENTO -->
+<div id="modal-pag" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>Registrar pagamento</h2>
+    <div class="field"><label>Valor pago (R$) *</label><input id="p-valor" type="number" min="0" step="0.01"></div>
+    <div class="field"><label>Data do pagamento *</label><input id="p-data" type="date"></div>
+    <div class="field"><label>Tipo</label>
+      <select id="p-tipo">
+        <option value="parcial">Pagamento parcial</option>
+        <option value="total">Quitação total</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal(&#39;pag&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPag()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL IMÓVEL -->
+<div id="modal-imov" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>Cadastrar imóvel</h2>
+    <div class="field"><label>Endereço / identificação *</label><input id="i-end" type="text" placeholder="Ex: Rua das Flores, 123"></div>
+    <div class="field"><label>Nome do inquilino *</label><input id="i-inq" type="text" placeholder="Ex: Maria Souza"></div>
+    <div class="field"><label>Valor do aluguel (R$) *</label><input id="i-valor" type="number" min="0" step="0.01"></div>
+    <div class="field"><label>Dia de vencimento *</label><input id="i-dia" type="number" min="1" max="31" placeholder="Ex: 10"></div>
+    <div class="field"><label>Início do contrato *</label><input id="i-inicio" type="date"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal(&#39;imov&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarImov()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BAIXA ALUGUEL -->
+<div id="modal-alug-pag" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>Confirmar pagamento</h2>
+    <p id="ap-desc" style="font-size:13px;color:var(--text2);margin-bottom:1rem;padding:10px;background:var(--surface2);border-radius:var(--radius)"></p>
+    <div class="field"><label>Data do pagamento *</label><input id="ap-data" type="date"></div>
+    <div class="field">
+      <label>Valor recebido (R$) *</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="ap-valor" type="number" min="0" step="0.01" style="flex:1">
+        <button class="btn btn-success" id="ap-valor-full-btn" onclick="preencherValorTotal()" style="white-space:nowrap;flex-shrink:0">✓ Valor total</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal(&#39;alug-pag&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarAlugPag()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'gestaoFinanceiraDB_v1';
+let DB = { emprestimos: [], imoveis: [], alugPags: [] };
+let currentEmpId = null, currentAlugPagCtx = null;
+let empFilter = 'ativos', alugFilter = 'imoveis';
+let alugMesFiltro = null;
+
+function loadDB() {
+  try { const s = localStorage.getItem(STORAGE_KEY); if (s) DB = JSON.parse(s); } catch(e) {}
+}
+function saveDB() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); } catch(e) {}
+}
+
+function fmt(v) {
+  return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  const p = d.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+function today() { return new Date().toISOString().split('T')[0]; }
+function monthsDiff(d1, d2) {
+  const a = new Date(d1), b = new Date(d2);
+  return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+function calcSaldo(emp) {
+  if (emp.quitado) return 0;
+  let saldo = Number(emp.valor);
+  const taxa = Number(emp.juros) / 100;
+  let data = emp.data;
+  const pags = (emp.pagamentos || []).slice().sort((a, b) => a.data.localeCompare(b.data));
+  const hoje = today();
+  for (const p of pags) {
+    const m = monthsDiff(data, p.data);
+    if (m > 0) saldo = saldo * Math.pow(1 + taxa, m);
+    saldo -= Number(p.valor);
+    if (saldo < 0) saldo = 0;
+    data = p.data;
+  }
+  const mFinal = monthsDiff(data, hoje);
+  if (mFinal > 0) saldo = saldo * Math.pow(1 + taxa, mFinal);
+  return Math.max(0, saldo);
+}
+
+function calcJuros(emp) {
+  const saldo = calcSaldo(emp);
+  const totalPago = (emp.pagamentos || []).reduce((s, p) => s + Number(p.valor), 0);
+  return Math.max(0, saldo + totalPago - Number(emp.valor));
+}
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('p-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'emprestimos') { renderEmpStats(); renderEmp(); }
+  if (page === 'alugueis') { renderAlugStats(); renderAlug(); }
+  if (page === 'emp-detail' && currentEmpId) renderEmpDetail();
+  if (page === 'imov-detail' && currentImovId) renderImovDetail();
+}
+
+function openModal(id) {
+  if (id === 'emp') document.getElementById('e-data').value = today();
+  document.getElementById('modal-' + id).classList.remove('hidden');
+}
+function closeModal(id) { document.getElementById('modal-' + id).classList.add('hidden'); }
+
+// ───── EMPRÉSTIMOS ─────
+
+function salvarEmp() {
+  const nome = document.getElementById('e-nome').value.trim();
+  const valor = document.getElementById('e-valor').value;
+  const juros = document.getElementById('e-juros').value;
+  const data = document.getElementById('e-data').value;
+  if (!nome || !valor || !juros || !data) { alert('Preencha todos os campos obrigatórios.'); return; }
+  DB.emprestimos.push({ id: uid(), nome, valor: Number(valor), juros: Number(juros), data, obs: document.getElementById('e-obs').value, pagamentos: [], quitado: false });
+  saveDB(); closeModal('emp');
+  ['e-nome','e-valor','e-juros','e-obs'].forEach(i => document.getElementById(i).value = '');
+  renderEmpStats(); renderEmp();
+}
+
+function empTab(f, el) {
+  empFilter = f;
+  document.querySelectorAll('#p-emprestimos .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const list = document.getElementById('emp-list');
+  const sim = document.getElementById('emp-sim');
+  const toolbar = document.getElementById('emp-toolbar');
+  if (f === 'simulacao') {
+    list.style.display = 'none'; sim.style.display = 'block'; toolbar.style.display = 'none'; renderSim();
+  } else {
+    list.style.display = 'flex'; sim.style.display = 'none'; toolbar.style.display = 'flex'; renderEmp();
+  }
+}
+
+function renderEmpStats() {
+  const total = DB.emprestimos.filter(e => !e.quitado).length;
+  const captado = DB.emprestimos.reduce((s, e) => s + Number(e.valor), 0);
+  const receber = DB.emprestimos.filter(e => !e.quitado).reduce((s, e) => s + calcSaldo(e), 0);
+  document.getElementById('emp-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Ativos</div><div class="stat-val">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Total emprestado</div><div class="stat-val">${fmt(captado)}</div></div>
+    <div class="stat-card"><div class="stat-label">A receber (c/ juros)</div><div class="stat-val">${fmt(receber)}</div></div>`;
+}
+
+function renderEmp() {
+  const q = (document.getElementById('emp-search').value || '').toLowerCase();
+  let list = DB.emprestimos.filter(e => e.nome.toLowerCase().includes(q));
+  if (empFilter === 'ativos') list = list.filter(e => !e.quitado);
+  if (empFilter === 'quitados') list = list.filter(e => e.quitado);
+  list = list.slice().sort((a, b) => b.data.localeCompare(a.data));
+  const el = document.getElementById('emp-list');
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">💸</div>Nenhum empréstimo encontrado</div>'; return; }
+  el.innerHTML = list.map(e => {
+    const saldo = calcSaldo(e);
+    const pct = e.quitado ? 100 : Math.min(100, ((Number(e.valor) - saldo) / Number(e.valor) * 100));
+    return `<div class="item-card" onclick="openDetail('${e.id}')">
+      <div class="item-header">
+        <div><div class="item-name">${e.nome}</div><div class="item-sub">Desde ${fmtDate(e.data)} · ${e.juros}% a.m.</div></div>
+        <span class="badge badge-${e.quitado ? 'quitado' : 'ativo'}">${e.quitado ? 'Quitado' : 'Ativo'}</span>
+      </div>
+      <div class="item-meta">
+        <div class="meta-item">Emprestado<strong>${fmt(e.valor)}</strong></div>
+        <div class="meta-item">Saldo atual<strong>${fmt(saldo)}</strong></div>
+        <div class="meta-item">Pagamentos<strong>${(e.pagamentos || []).length}</strong></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct.toFixed(0)}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function openDetail(id) {
+  currentEmpId = id;
+  document.getElementById('detail-name').textContent = DB.emprestimos.find(x => x.id === id).nome;
+  goTo('emp-detail');
+}
+
+function renderEmpDetail() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId);
+  if (!e) return;
+  const saldo = calcSaldo(e);
+  const juros = calcJuros(e);
+  const totalPago = (e.pagamentos || []).reduce((s, p) => s + Number(p.valor), 0);
+  const pags = (e.pagamentos || []).slice().sort((a, b) => b.data.localeCompare(a.data));
+  document.getElementById('emp-detail-body').innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Saldo devedor</div><div class="stat-val" style="color:var(--red)">${fmt(saldo)}</div></div>
+      <div class="stat-card"><div class="stat-label">Juros acumulados</div><div class="stat-val">${fmt(juros)}</div></div>
+      <div class="stat-card"><div class="stat-label">Total já pago</div><div class="stat-val" style="color:var(--green)">${fmt(totalPago)}</div></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-row"><span>Devedor</span><span>${e.nome}</span></div>
+      <div class="detail-row"><span>Valor original</span><span>${fmt(e.valor)}</span></div>
+      <div class="detail-row"><span>Taxa de juros</span><span>${e.juros}% a.m.</span></div>
+      <div class="detail-row"><span>Data início</span><span>${fmtDate(e.data)}</span></div>
+      <div class="detail-row"><span>Status</span><span>${e.quitado ? '✅ Quitado' : '🟡 Em aberto'}</span></div>
+      ${e.obs ? `<div class="detail-row"><span>Observações</span><span>${e.obs}</span></div>` : ''}
+    </div>
+    <div class="section-title">Histórico de pagamentos</div>
+    <div class="item-card no-click">
+      ${pags.length ? pags.map(p => `
+        <div class="hist-item">
+          <div><div style="font-weight:500">${fmt(p.valor)}</div><div class="hist-sub">${fmtDate(p.data)} · ${p.tipo}</div></div>
+          <span class="tpos">✓ pago</span>
+        </div>`).join('') : '<div class="empty" style="padding:1.5rem">Nenhum pagamento registrado</div>'}
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap">
+      ${!e.quitado ? `<button class="btn" onclick="quitarEmp('${e.id}')">✓ Marcar como quitado</button>` : ''}
+      <button class="btn btn-danger" onclick="excluirEmp('${e.id}')">🗑 Excluir empréstimo</button>
+    </div>`;
+}
+
+function quitarEmp(id) {
+  if (!confirm('Marcar este empréstimo como quitado?')) return;
+  DB.emprestimos.find(x => x.id === id).quitado = true;
+  saveDB(); renderEmpDetail(); renderEmpStats();
+}
+function excluirEmp(id) {
+  if (!confirm('Excluir este empréstimo permanentemente?')) return;
+  DB.emprestimos = DB.emprestimos.filter(x => x.id !== id);
+  saveDB(); goTo('emprestimos');
+}
+
+function openPagModal() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId);
+  if (!e || e.quitado) { alert('Este empréstimo já está quitado.'); return; }
+  document.getElementById('p-data').value = today();
+  document.getElementById('p-valor').value = calcSaldo(e).toFixed(2);
+  openModal('pag');
+}
+function salvarPag() {
+  const valor = document.getElementById('p-valor').value;
+  const data = document.getElementById('p-data').value;
+  const tipo = document.getElementById('p-tipo').value;
+  if (!valor || !data) { alert('Preencha todos os campos.'); return; }
+  const e = DB.emprestimos.find(x => x.id === currentEmpId);
+  e.pagamentos.push({ id: uid(), valor: Number(valor), data, tipo });
+  if (tipo === 'total') e.quitado = true;
+  saveDB(); closeModal('pag');
+  document.getElementById('p-valor').value = '';
+  renderEmpDetail(); renderEmpStats();
+}
+
+// ───── SIMULAÇÃO ─────
+
+function renderSim() {
+  document.getElementById('emp-sim').innerHTML = `
+    <div class="sim-wrap">
+      <div class="sim-grid">
+        <div class="sim-field"><label>Valor do empréstimo (R$)</label><input type="number" id="sv" value="5000" min="0" step="100" oninput="calcSim()"></div>
+        <div class="sim-field"><label>Taxa de juros mensal (%)</label><input type="number" id="sj" value="5" min="0.1" step="0.5" oninput="calcSim()"></div>
+        <div class="sim-field"><label>Número de meses</label><input type="number" id="sm" value="12" min="1" max="120" step="1" oninput="calcSim()"></div>
+        <div class="sim-field"><label>Tipo de cálculo</label>
+          <select id="st" onchange="calcSim()">
+            <option value="simples">Juros simples</option>
+            <option value="compostos" selected>Juros compostos</option>
+            <option value="price">Tabela Price (parcelas fixas)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="sim-output"></div>`;
+  calcSim();
+}
+
+function calcSim() {
+  const V = parseFloat(document.getElementById('sv').value) || 0;
+  const taxa = parseFloat(document.getElementById('sj').value) / 100 || 0;
+  const meses = parseInt(document.getElementById('sm').value) || 1;
+  const tipo = document.getElementById('st').value;
+  const out = document.getElementById('sim-output');
+  if (!V || !taxa || !meses) { out.innerHTML = ''; return; }
+
+  let rows = [], totalJuros = 0, totalPago = 0;
+
+  if (tipo === 'simples') {
+    let saldo = V;
+    for (let i = 1; i <= meses; i++) {
+      const j = V * taxa;
+      totalJuros += j; totalPago += j;
+      rows.push({ mes: i, parcela: j, juros: j, capital: 0, saldo: V });
+    }
+    totalPago += V;
+  } else if (tipo === 'compostos') {
+    let saldo = V;
+    for (let i = 1; i <= meses; i++) {
+      const j = saldo * taxa;
+      totalJuros += j; totalPago += j; saldo += j;
+      rows.push({ mes: i, parcela: j, juros: j, capital: 0, saldo });
+    }
+    totalPago += V;
+  } else {
+    const parc = V * (taxa * Math.pow(1 + taxa, meses)) / (Math.pow(1 + taxa, meses) - 1);
+    let saldo = V;
+    for (let i = 1; i <= meses; i++) {
+      const j = saldo * taxa;
+      const cap = parc - j;
+      saldo = Math.max(0, saldo - cap);
+      totalJuros += j; totalPago += parc;
+      rows.push({ mes: i, parcela: parc, juros: j, capital: cap, saldo });
+    }
+  }
+
+  const maxJ = Math.max(...rows.map(r => r.juros));
+  const maxC = Math.max(...rows.map(r => r.capital));
+  const tipoLabel = { simples: 'Juros simples', compostos: 'Juros compostos', price: 'Tabela Price' }[tipo];
+
+  out.innerHTML = `
+    <div class="sim-wrap">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">${tipoLabel} · ${meses} meses</div>
+      <div class="sim-stats">
+        <div class="sim-stat"><div class="sim-stat-label">Valor emprestado</div><div class="sim-stat-val">${fmt(V)}</div></div>
+        <div class="sim-stat"><div class="sim-stat-label">Total de juros</div><div class="sim-stat-val" style="color:var(--red)">${fmt(totalJuros)}</div></div>
+        <div class="sim-stat"><div class="sim-stat-label">Total a pagar</div><div class="sim-stat-val">${fmt(totalPago)}</div></div>
+        <div class="sim-stat"><div class="sim-stat-label">Custo efetivo</div><div class="sim-stat-val">${((totalJuros / V) * 100).toFixed(1)}%</div></div>
+      </div>
+      <div class="sim-table-wrap">
+        <table class="sim-table">
+          <thead><tr>
+            <th>Mês</th>
+            ${tipo === 'price' ? '<th>Parcela</th>' : ''}
+            <th>Juros</th>
+            ${tipo === 'price' ? '<th>Amortização</th>' : ''}
+            <th>Saldo</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(r => `<tr>
+              <td>${r.mes}</td>
+              ${tipo === 'price' ? `<td>${fmt(r.parcela)}</td>` : ''}
+              <td>${fmt(r.juros)}${tipo === 'price' && maxJ > 0 ? `<div class="bar-wrap"><div class="bar-juros" style="width:${(r.juros/maxJ*100).toFixed(0)}%"></div></div>` : ''}</td>
+              ${tipo === 'price' ? `<td>${fmt(r.capital)}${maxC > 0 ? `<div class="bar-wrap"><div class="bar-cap" style="width:${(r.capital/maxC*100).toFixed(0)}%"></div></div>` : ''}</td>` : ''}
+              <td>${fmt(r.saldo)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      ${tipo === 'price' ? `<div class="legend">
+        <span><span class="dot" style="background:var(--red)"></span>Juros</span>
+        <span><span class="dot" style="background:var(--green)"></span>Amortização</span>
+      </div>` : ''}
+    </div>`;
+}
+
+// ───── ALUGUÉIS ─────
+
+let currentImovId = null;
+
+function renderAlugStats() {
+  const ativos = DB.imoveis.filter(i => i.ativo !== false).length;
+  const mensal = DB.imoveis.filter(i => i.ativo !== false).reduce((s, i) => s + Number(i.valor), 0);
+  const mes = today().slice(0, 7);
+  const pgMes = DB.alugPags.filter(p => p.mes === mes && p.pago).length;
+  document.getElementById('alug-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Imóveis ativos</div><div class="stat-val">${ativos}</div></div>
+    <div class="stat-card"><div class="stat-label">Receita mensal</div><div class="stat-val">${fmt(mensal)}</div></div>
+    <div class="stat-card"><div class="stat-label">Pagos este mês</div><div class="stat-val">${pgMes}/${ativos}</div></div>`;
+}
+
+function alugTab(f, el) {
+  alugFilter = f;
+  document.querySelectorAll('#p-alugueis .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active'); renderAlug();
+}
+
+function renderAlug() {
+  const el = document.getElementById('alug-body');
+  if (alugFilter === 'imoveis') renderImoveis(el);
+  else if (alugFilter === 'pagamentos') renderPagMes(el);
+  else renderHistAlug(el);
+}
+
+function renderImoveis(el) {
+  const list = DB.imoveis;
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🏚</div>Nenhum imóvel cadastrado</div>'; return; }
+  el.innerHTML = '<div class="card-list">' + list.map(i => {
+    // Count pending months
+    const pendentes = getPendentesImov(i);
+    return `
+    <div class="item-card" onclick="openImovDetail('${i.id}')">
+      <div class="item-header">
+        <div><div class="item-name">${i.inq}</div><div class="item-sub">${i.end}</div></div>
+        <span class="badge ${pendentes.length > 0 ? 'badge-pendente' : 'badge-ativo'}">${pendentes.length > 0 ? `${pendentes.length} pendente${pendentes.length > 1 ? 's' : ''}` : 'Em dia'}</span>
+      </div>
+      <div class="item-meta">
+        <div class="meta-item">Aluguel<strong>${fmt(i.valor)}</strong></div>
+        <div class="meta-item">Vencimento<strong>Dia ${i.dia}</strong></div>
+        <div class="meta-item">Início<strong>${fmtDate(i.inicio)}</strong></div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function getPendentesImov(imov) {
+  // Generate months from contract start to current month
+  const inicio = imov.inicio.slice(0, 7);
+  const atual = today().slice(0, 7);
+  const pendentes = [];
+  let cursor = inicio;
+  while (cursor <= atual) {
+    const pago = DB.alugPags.find(p => p.imovelId === imov.id && p.mes === cursor && p.pago);
+    if (!pago) pendentes.push(cursor);
+    // advance month
+    const [y, m] = cursor.split('-').map(Number);
+    const next = m === 12 ? `${y+1}-01` : `${y}-${String(m+1).padStart(2,'0')}`;
+    cursor = next;
+  }
+  return pendentes;
+}
+
+function openImovDetail(id) {
+  currentImovId = id;
+  const imov = DB.imoveis.find(i => i.id === id);
+  document.getElementById('imov-detail-name').textContent = imov.inq;
+  document.getElementById('imov-detail-del-btn').onclick = () => excluirImov(id);
+  renderImovDetail();
+  goTo('imov-detail');
+}
+
+function renderImovDetail() {
+  const imov = DB.imoveis.find(i => i.id === currentImovId);
+  if (!imov) return;
+
+  const inicio = imov.inicio.slice(0, 7);
+  const atual = today().slice(0, 7);
+  const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  // Build all months list
+  let mesesList = [];
+  let cursor = inicio;
+  while (cursor <= atual) {
+    const pag = DB.alugPags.find(p => p.imovelId === imov.id && p.mes === cursor && p.pago);
+    mesesList.push({ mes: cursor, pag });
+    const [y, m] = cursor.split('-').map(Number);
+    cursor = m === 12 ? `${y+1}-01` : `${y}-${String(m+1).padStart(2,'0')}`;
+  }
+
+  // Sort: pending first, then paid descending
+  const pendentes = mesesList.filter(x => !x.pag).reverse(); // most recent pending first
+  const pagos = mesesList.filter(x => x.pag).reverse();
+  const sorted = [...pendentes, ...pagos];
+
+  const totalPago = pagos.reduce((s, x) => s + Number(x.pag.valor), 0);
+  const totalPendente = pendentes.length * Number(imov.valor);
+
+  document.getElementById('imov-detail-body').innerHTML = `
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Aluguel mensal</div><div class="stat-val">${fmt(imov.valor)}</div></div>
+      <div class="stat-card"><div class="stat-label">Meses pendentes</div><div class="stat-val" style="color:${pendentes.length > 0 ? 'var(--amber)' : 'var(--green)'}">${pendentes.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Total pendente</div><div class="stat-val" style="color:var(--red)">${fmt(totalPendente)}</div></div>
+      <div class="stat-card"><div class="stat-label">Total recebido</div><div class="stat-val" style="color:var(--green)">${fmt(totalPago)}</div></div>
+    </div>
+    <div class="detail-section" style="margin-bottom:1.5rem">
+      <div class="detail-row"><span>Inquilino</span><span>${imov.inq}</span></div>
+      <div class="detail-row"><span>Endereço</span><span>${imov.end}</span></div>
+      <div class="detail-row"><span>Vencimento</span><span>Dia ${imov.dia} de cada mês</span></div>
+      <div class="detail-row"><span>Início do contrato</span><span>${fmtDate(imov.inicio)}</span></div>
+    </div>
+    <div class="section-title">Histórico de mensalidades</div>
+    <div class="card-list">
+      ${sorted.map(({ mes, pag }) => {
+        const [y, m] = mes.split('-');
+        const label = `${nomesMeses[Number(m)-1]} ${y}`;
+        return `<div class="item-card no-click" style="padding:.85rem 1.25rem">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:500;font-size:14px">${label}</div>
+              ${pag ? `<div class="hist-sub">Pago em ${fmtDate(pag.data)} · ${fmt(pag.valor)}</div>` : `<div class="hist-sub" style="color:var(--amber)">Aguardando pagamento</div>`}
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="badge badge-${pag ? 'pago' : 'pendente'}">${pag ? 'Pago' : 'Pendente'}</span>
+              ${!pag ? `<button class="btn btn-success" style="padding:5px 12px;font-size:12px" onclick="abrirAlugPag('${imov.id}','${mes}')">Dar baixa</button>` : `<button class="btn btn-danger" style="padding:5px 10px;font-size:12px" onclick="estornarAlugPag('${imov.id}','${mes}')">Estornar</button>`}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function estornarAlugPag(imovelId, mes) {
+  if (!confirm('Remover este pagamento?')) return;
+  DB.alugPags = DB.alugPags.filter(p => !(p.imovelId === imovelId && p.mes === mes));
+  saveDB(); renderImovDetail(); renderAlugStats();
+}
+
+function renderPagMes(el) {
+  const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  // Build month selector: from earliest contract start to today
+  const starts = DB.imoveis.map(i => i.inicio.slice(0,7));
+  const earliest = starts.length ? starts.sort()[0] : today().slice(0,7);
+  const atual = today().slice(0,7);
+  let mesesOpts = [];
+  let c = earliest;
+  while (c <= atual) {
+    mesesOpts.push(c);
+    const [y, m] = c.split('-').map(Number);
+    c = m === 12 ? `${y+1}-01` : `${y}-${String(m+1).padStart(2,'0')}`;
+  }
+  mesesOpts.reverse(); // most recent first
+
+  if (!alugMesFiltro || alugMesFiltro > atual) alugMesFiltro = atual;
+
+  const imoveis = DB.imoveis.filter(i => i.ativo !== false && i.inicio.slice(0,7) <= alugMesFiltro);
+  const pendentes = imoveis.filter(i => !DB.alugPags.find(p => p.imovelId === i.id && p.mes === alugMesFiltro && p.pago));
+  const pagos = imoveis.filter(i => DB.alugPags.find(p => p.imovelId === i.id && p.mes === alugMesFiltro && p.pago));
+  const sorted = [...pendentes, ...pagos];
+
+  const [fy, fm] = alugMesFiltro.split('-');
+  const mesLabel = `${nomesMeses[Number(fm)-1]} ${fy}`;
+  const totalRecebido = pagos.reduce((s, i) => {
+    const pag = DB.alugPags.find(p => p.imovelId === i.id && p.mes === alugMesFiltro && p.pago);
+    return s + (pag ? Number(pag.valor) : 0);
+  }, 0);
+
+  el.innerHTML = `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem;flex-wrap:wrap">
+      <select onchange="alugMesFiltro=this.value;renderAlug()" style="padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);cursor:pointer">
+        ${mesesOpts.map(m => {
+          const [y, mo] = m.split('-');
+          return `<option value="${m}" ${m === alugMesFiltro ? 'selected' : ''}>${nomesMeses[Number(mo)-1]} ${y}</option>`;
+        }).join('')}
+      </select>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="badge badge-pendente">${pendentes.length} pendente${pendentes.length !== 1 ? 's' : ''}</span>
+        <span class="badge badge-pago">${pagos.length} pago${pagos.length !== 1 ? 's' : ''}</span>
+        ${pagos.length > 0 ? `<span style="font-size:12px;color:var(--green-text);font-weight:500;padding:3px 6px">Total: ${fmt(totalRecebido)}</span>` : ''}
+      </div>
+    </div>
+    ${!imoveis.length ? '<div class="empty"><div class="empty-icon">📅</div>Nenhum imóvel neste período</div>' :
+    '<div class="card-list">' + sorted.map(i => {
+      const pag = DB.alugPags.find(p => p.imovelId === i.id && p.mes === alugMesFiltro && p.pago);
+      return `<div class="item-card no-click">
+        <div class="item-header">
+          <div><div class="item-name">${i.inq}</div><div class="item-sub">${i.end} · Vence dia ${i.dia}</div></div>
+          <span class="badge badge-${pag ? 'pago' : 'pendente'}">${pag ? 'Pago' : 'Pendente'}</span>
+        </div>
+        <div class="item-meta">
+          <div class="meta-item">Valor<strong>${fmt(i.valor)}</strong></div>
+          ${pag ? `<div class="meta-item">Pago em<strong>${fmtDate(pag.data)}</strong></div><div class="meta-item">Recebido<strong>${fmt(pag.valor)}</strong></div>` : ''}
+        </div>
+        <div class="item-actions">
+          ${!pag ? `<button class="btn btn-success" onclick="abrirAlugPag('${i.id}','${alugMesFiltro}')">✓ Confirmar pagamento</button>` :
+          `<button class="btn btn-danger" onclick="estornarAlugPag('${i.id}','${alugMesFiltro}')">↩ Estornar</button>`}
+        </div>
+      </div>`;
+    }).join('') + '</div>'}`;
+}
+
+function renderHistAlug(el) {
+  const sorted = DB.alugPags.filter(p => p.pago).slice().sort((a, b) => b.mes.localeCompare(a.mes));
+  if (!sorted.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>Nenhum pagamento registrado</div>'; return; }
+  const byMes = {};
+  sorted.forEach(p => { if (!byMes[p.mes]) byMes[p.mes] = []; byMes[p.mes].push(p); });
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  el.innerHTML = '<div class="card-list">' + Object.entries(byMes).map(([mes, pags]) => {
+    const [y, m] = mes.split('-');
+    const total = pags.reduce((s, p) => s + Number(p.valor), 0);
+    return `<div class="month-group">
+      <div class="month-header"><span>${meses[Number(m)-1]} ${y}</span><span style="color:var(--green)">${fmt(total)}</span></div>
+      <div class="item-card no-click" style="padding:0 1.25rem">
+        ${pags.map(p => { const imov = DB.imoveis.find(i => i.id === p.imovelId);
+          return `<div class="hist-item">
+            <div><div style="font-weight:500">${imov ? imov.inq : '—'}</div><div class="hist-sub">${imov ? imov.end : ''} · pago em ${fmtDate(p.data)}</div></div>
+            <span class="tpos">${fmt(p.valor)}</span>
+          </div>`; }).join('')}
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function salvarImov() {
+  const end = document.getElementById('i-end').value.trim();
+  const inq = document.getElementById('i-inq').value.trim();
+  const valor = document.getElementById('i-valor').value;
+  const dia = document.getElementById('i-dia').value;
+  const inicio = document.getElementById('i-inicio').value;
+  if (!end || !inq || !valor || !dia || !inicio) { alert('Preencha todos os campos obrigatórios.'); return; }
+  DB.imoveis.push({ id: uid(), end, inq, valor: Number(valor), dia: Number(dia), inicio, ativo: true });
+  saveDB(); closeModal('imov');
+  ['i-end','i-inq','i-valor','i-dia'].forEach(x => document.getElementById(x).value = '');
+  renderAlugStats(); renderAlug();
+}
+
+function excluirImov(id) {
+  if (!confirm('Excluir este imóvel e todos os seus registros?')) return;
+  DB.imoveis = DB.imoveis.filter(x => x.id !== id);
+  DB.alugPags = DB.alugPags.filter(x => x.imovelId !== id);
+  saveDB();
+  if (document.getElementById('p-imov-detail').classList.contains('active')) goTo('alugueis');
+  else { renderAlugStats(); renderAlug(); }
+}
+
+function preencherValorTotal() {
+  const imov = DB.imoveis.find(i => i.id === currentAlugPagCtx.imovelId);
+  if (imov) document.getElementById('ap-valor').value = imov.valor.toFixed(2);
+}
+
+function abrirAlugPag(imovelId, mes) {
+  currentAlugPagCtx = { imovelId, mes };
+  const imov = DB.imoveis.find(i => i.id === imovelId);
+  const [y, m] = mes.split('-');
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('ap-desc').textContent = `${imov.inq} — ${meses[Number(m)-1]} ${y} · Valor: ${fmt(imov.valor)}`;
+  document.getElementById('ap-data').value = today();
+  document.getElementById('ap-valor').value = imov.valor.toFixed(2);
+  openModal('alug-pag');
+}
+
+function confirmarAlugPag() {
+  const data = document.getElementById('ap-data').value;
+  const valor = document.getElementById('ap-valor').value;
+  if (!data || !valor) { alert('Preencha todos os campos.'); return; }
+  const { imovelId, mes } = currentAlugPagCtx;
+  DB.alugPags = DB.alugPags.filter(p => !(p.imovelId === imovelId && p.mes === mes));
+  DB.alugPags.push({ id: uid(), imovelId, mes, data, valor: Number(valor), pago: true });
+  saveDB(); closeModal('alug-pag');
+  renderAlugStats();
+  // Refresh wherever we are
+  if (document.getElementById('p-imov-detail').classList.contains('active')) renderImovDetail();
+  else renderAlug();
+}
+
+// Fechar modal ao clicar fora
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.add('hidden'); });
+});
+
+loadDB();
+alugMesFiltro = today().slice(0, 7);
+</script>
+
+
+</body></html>
