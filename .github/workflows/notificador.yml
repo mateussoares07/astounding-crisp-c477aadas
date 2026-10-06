@@ -1,0 +1,26 @@
+name: Notificador Diário
+
+on:
+  schedule:
+    # Roda todos os dias às 09h00 da manhã no horário do Brasil (12:00 UTC)
+    - cron: '0 12 * * *'
+  # Permite executar o robô manualmente através de um botão para testes
+  workflow_dispatch: 
+
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acessar os arquivos do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o ambiente (Node.js)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Executar o script do robô
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node notificador.js
