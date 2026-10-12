@@ -160,6 +160,26 @@
   .previa .tot{font-size:16px;font-weight:600;color:var(--red-text);margin-top:4px}
   .atalhos{display:flex;gap:8px;flex-wrap:wrap;margin:-.3rem 0 1rem}
 
+  /* pagamentos do mês */
+  #p-emprestimos .tabs{flex-wrap:wrap;width:auto;max-width:100%}
+  .sel-mes{padding:11px 14px;border:1px solid var(--border2);border-radius:var(--radius);font-size:16px;font-family:inherit;background:var(--surface);color:var(--text);cursor:pointer;min-height:46px}
+  .barra{height:10px;background:var(--surface2);border-radius:6px;overflow:hidden;margin:2px 0 1.2rem}
+  .barra div{height:100%;background:var(--green);border-radius:6px;transition:width .3s}
+  .mes-topo{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:1rem}
+  .mes-topo .badge{font-size:13px;padding:5px 12px}
+  .resumo-wrap{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);overflow:hidden}
+  .resumo-linha{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:8px;padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:13.5px;align-items:center;cursor:pointer}
+  .resumo-linha:last-child{border-bottom:none}
+  .resumo-linha:not(.cab):hover{background:var(--surface2)}
+  .resumo-linha.sel{background:var(--surface2);font-weight:600}
+  .resumo-linha.cab{cursor:default;background:var(--surface2);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);font-weight:600}
+  .resumo-linha .rl-mes{font-weight:600;font-size:14px}
+  .resumo-linha .verde{color:var(--green-text)}
+  .resumo-linha .verm{color:var(--red-text)}
+  .resumo-linha span{text-align:right}
+  .resumo-linha span:first-child{text-align:left}
+  @media(max-width:500px){.resumo-linha{grid-template-columns:1.3fr 1fr 1fr 1fr;gap:4px;padding:.7rem .6rem;font-size:12px}.resumo-linha .rl-mes{font-size:12.5px}}
+
   /* aviso rápido */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:13px 20px;border-radius:10px;font-size:15px;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -207,11 +227,13 @@
     <button class="tab" onclick="empTab('devendo',this)">Devendo</button>
     <button class="tab" onclick="empTab('quitados',this)">Quitados</button>
     <button class="tab" onclick="empTab('todos',this)">Todos</button>
+    <button class="tab" onclick="empTab('mes',this)">Pagamentos do mês</button>
   </div>
   <div class="toolbar" id="emp-toolbar">
     <input class="search-input" style="font-size:16px;padding:11px 14px" type="text" id="emp-search" placeholder="Buscar pelo nome..." oninput="renderEmp()">
   </div>
   <div id="emp-list" class="card-list"></div>
+  <div id="emp-mes" class="hidden"></div>
 </div>
 
 <!-- DETALHE EMPRÉSTIMO -->
@@ -344,6 +366,54 @@
     <div class="modal-footer">
       <button class="btn btn-lg" onclick="closeModal('emp-pag')">Cancelar</button>
       <button class="btn btn-success btn-lg" id="ep-confirmar" onclick="confirmarPagamento()">Confirmar pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR CLIENTE (EMPRÉSTIMO) -->
+<div id="modal-emp-edit" class="modal-overlay hidden">
+  <div class="modal modal-lg">
+    <h2>Editar dados do cliente</h2>
+    <div class="field">
+      <label for="ed-nome">Nome *</label>
+      <input id="ed-nome" type="text" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="ed-resp">Responsável <span style="font-weight:400;color:var(--text2)">(só se for outra pessoa)</span></label>
+      <input id="ed-resp" type="text" autocomplete="off">
+      <div class="dica">Se o responsável é a mesma pessoa, deixe vazio.</div>
+    </div>
+    <div class="field">
+      <label for="ed-tel">Telefone com DDD</label>
+      <input id="ed-tel" type="tel" inputmode="tel" autocomplete="off">
+    </div>
+    <div class="duas">
+      <div class="field">
+        <label for="ed-capital">Valor emprestado (R$) *</label>
+        <input id="ed-capital" type="number" inputmode="decimal" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="ed-dia">Dia do vencimento (1 a 31) *</label>
+        <input id="ed-dia" type="number" inputmode="numeric" min="1" max="31" step="1">
+      </div>
+    </div>
+    <div class="opcoes" id="ed-mod-opcoes">
+      <label class="opcao"><input type="radio" name="ed-mod" value="JUROS_SIMPLES" onchange="aoMudarModalidadeEdicao()">
+        <span><b>Só os juros todo mês</b></span></label>
+      <label class="opcao"><input type="radio" name="ed-mod" value="PARCELADO" onchange="aoMudarModalidadeEdicao()">
+        <span><b>Parcelas fixas</b></span></label>
+    </div>
+    <div class="field">
+      <label for="ed-valor-cob" id="ed-valor-label">Valor do juros por mês (R$) *</label>
+      <input id="ed-valor-cob" type="number" inputmode="decimal" min="0" step="0.01" oninput="aoMudarValorEdicao()">
+    </div>
+    <label class="opcao hidden" id="ed-aplicar-box">
+      <input type="checkbox" id="ed-aplicar">
+      <span><b>Aplicar o novo valor aos meses em aberto</b><small id="ed-aplicar-txt"></small></span>
+    </label>
+    <div class="modal-footer">
+      <button class="btn btn-lg" onclick="closeModal('emp-edit')">Cancelar</button>
+      <button class="btn btn-primary btn-lg" onclick="salvarEdicao()">Salvar alterações</button>
     </div>
   </div>
 </div>
@@ -496,6 +566,8 @@ function closeModal(id) { document.getElementById('modal-' + id).classList.add('
 const NOMES_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 let e_ateManual = false;
 let empEditarMeses = false;
+let empMesSel = null;
+let pagMesId = null; // quando preenchido, o pagamento vale só para esse mês
 let toastTimer = null;
 
 // ── utilidades ──
@@ -764,6 +836,11 @@ function renderEmpStats() {
 }
 
 function renderEmp() {
+  const abaMes = empFilter === 'mes';
+  elx('emp-list').classList.toggle('hidden', abaMes);
+  elx('emp-toolbar').classList.toggle('hidden', abaMes);
+  elx('emp-mes').classList.toggle('hidden', !abaMes);
+  if (abaMes) { renderEmpMes(); return; }
   const q = (elx('emp-search').value || '').toLowerCase().trim();
   let list = DB.emprestimos.filter(e => !q || (e.identificacao || '').toLowerCase().includes(q) || (e.telefone || '').includes(q));
   if (empFilter === 'ativos') list = list.filter(e => !e.quitado);
@@ -849,10 +926,11 @@ function renderEmpDetail() {
       <div class="stat-card"><div class="stat-label">${e.modalidade === 'PARCELADO' ? 'Parcela' : 'Juros por mês'}</div><div class="stat-val">${fmt(e.valor_cobranca)}</div></div>
       <div class="stat-card"><div class="stat-label">Vence todo dia</div><div class="stat-val">${esc(e.dia_cobranca)}</div></div>
     </div>
-    ${e.quitado ? '' : `<div class="acoes">
-      <button class="btn btn-success btn-xl" onclick="abrirPagamento()" ${devendo ? '' : 'disabled'}>💵 Registrar pagamento</button>
-      <button class="btn btn-lg" onclick="abrirLancarMes()">+ Lançar mês em aberto</button>
-    </div>`}
+    <div class="acoes">
+      ${e.quitado ? '' : `<button class="btn btn-success btn-xl" onclick="abrirPagamento()" ${devendo ? '' : 'disabled'}>💵 Registrar pagamento</button>
+      <button class="btn btn-lg" onclick="abrirLancarMes()">+ Lançar mês em aberto</button>`}
+      <button class="btn btn-lg" onclick="abrirEdicao()">✏️ Editar dados</button>
+    </div>
 
     <div class="sec-titulo"><span>Meses em aberto <small>(${r.abertos.length})</small></span>
       ${r.abertos.some(m => Number(m.valor_pago) <= 0.004 && !geradoPeloRobo(e, m)) ? `<button class="link-sutil" onclick="toggleEditarMeses()">${empEditarMeses ? 'pronto' : 'corrigir lista'}</button>` : ''}</div>
@@ -920,14 +998,27 @@ async function excluirEmp(id) {
 }
 
 // ── registrar pagamento ──
-function abrirPagamento() {
+function abrirPagamento() { pagMesId = null; abrirModalPagamento(); }
+function abrirPagamentoMes(mid) {
+  const m = DB.meses.find(x => x.id === mid); if (!m) return;
+  currentEmpId = m.emprestimo_id; pagMesId = mid; abrirModalPagamento();
+}
+function abertosDoPagamento(r) { return pagMesId ? r.abertos.filter(m => m.id === pagMesId) : r.abertos; }
+function abrirModalPagamento() {
   const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
   const r = resumoEmp(e.id);
   if (r.total <= 0.004) return aviso('Este cliente não tem nenhum mês em aberto.');
-  elx('ep-resumo').innerHTML = `<b>${esc(splitIdent(e.identificacao).nome)}</b> está devendo <b>${fmt(r.total)}</b> (${r.abertos.length} ${r.abertos.length === 1 ? 'mês' : 'meses'}).`;
-  const primeiro = falta(r.abertos[0]);
-  let at = `<button class="btn btn-sm" onclick="setValorPag(${primeiro})">Mês mais antigo (${fmt(primeiro)})</button>`;
-  if (r.abertos.length > 1) at += `<button class="btn btn-sm" onclick="setValorPag(${r.total})">Pagar tudo (${fmt(r.total)})</button>`;
+  const ab = abertosDoPagamento(r);
+  if (!ab.length) return aviso('Esse mês já está pago.');
+  const nomeCli = esc(splitIdent(e.identificacao).nome);
+  elx('ep-resumo').innerHTML = pagMesId
+    ? `<b>${nomeCli}</b> · <b>${esc(mesLabel(ab[0].competencia))}</b>: falta <b>${fmt(falta(ab[0]))}</b>.${r.total > falta(ab[0]) + 0.004 ? `<br>No total, ele deve ${fmt(r.total)}.` : ''}`
+    : `<b>${nomeCli}</b> está devendo <b>${fmt(r.total)}</b> (${r.abertos.length} ${r.abertos.length === 1 ? 'mês' : 'meses'}).`;
+  const primeiro = falta(ab[0]);
+  let at = pagMesId
+    ? `<button class="btn btn-sm" onclick="setValorPag(${primeiro})">Pagar o mês inteiro (${fmt(primeiro)})</button>`
+    : `<button class="btn btn-sm" onclick="setValorPag(${primeiro})">Mês mais antigo (${fmt(primeiro)})</button>`;
+  if (!pagMesId && r.abertos.length > 1) at += `<button class="btn btn-sm" onclick="setValorPag(${r.total})">Pagar tudo (${fmt(r.total)})</button>`;
   elx('ep-atalhos').innerHTML = at;
   elx('ep-valor').value = ''; elx('ep-data').value = hojeISO();
   previaPagamento(); openModal('emp-pag');
@@ -939,14 +1030,15 @@ function previaPagamento() {
   const box = elx('ep-previa'), btn = elx('ep-confirmar');
   const valor = r2(elx('ep-valor').value);
   if (!(valor > 0)) { box.classList.add('hidden'); btn.disabled = true; return; }
-  const r = resumoEmp(e.id), { dist, sobra } = distribuir(r.abertos, valor);
+  const r = resumoEmp(e.id), ab = abertosDoPagamento(r), { dist, sobra } = distribuir(ab, valor);
+  const devendoAgora = r2(ab.reduce((s, m) => s + falta(m), 0));
   box.classList.remove('hidden');
   if (sobra > 0) {
-    box.innerHTML = `<span class="bad">Esse valor é maior do que ele está devendo (${fmt(r.total)}). Confira o valor.</span>`;
+    box.innerHTML = `<span class="bad">Esse valor é maior do que falta ${pagMesId ? 'nesse mês' : 'ele pagar'} (${fmt(devendoAgora)}). Confira o valor.</span>`;
     btn.disabled = true; return;
   }
   const linhas = dist.map(d => {
-    const m = r.abertos.find(x => x.id === d.mes_id), resta = r2(falta(m) - d.valor);
+    const m = ab.find(x => x.id === d.mes_id), resta = r2(falta(m) - d.valor);
     return resta <= 0.004 ? `✓ Quita <b>${esc(mesLabel(d.competencia))}</b>`
       : `Abate ${fmt(d.valor)} de <b>${esc(mesLabel(d.competencia))}</b> (ainda falta ${fmt(resta)})`;
   });
@@ -959,8 +1051,8 @@ async function confirmarPagamento() {
   const valor = r2(elx('ep-valor').value), data = elx('ep-data').value;
   if (!(valor > 0)) return aviso('Escreva quanto ele pagou.', 'erro');
   if (!data) return aviso('Escolha a data do pagamento.', 'erro');
-  const r = resumoEmp(e.id), { dist, sobra } = distribuir(r.abertos, valor);
-  if (sobra > 0 || !dist.length) return aviso('Esse valor é maior do que ele está devendo.', 'erro');
+  const r = resumoEmp(e.id), { dist, sobra } = distribuir(abertosDoPagamento(r), valor);
+  if (sobra > 0 || !dist.length) return aviso('Esse valor é maior do que falta pagar.', 'erro');
   loading(true);
   try {
     for (const d of dist) {
@@ -971,7 +1063,7 @@ async function confirmarPagamento() {
     const pg = await sbInsert('emprestimo_pagamentos', { emprestimo_id: e.id, data_pagamento: data, valor, distribuicao: dist });
     DB.pagamentos.push(pg[0]);
     await sincronizarEmp(e.id);
-    closeModal('emp-pag'); renderEmpDetail(); renderEmpStats();
+    closeModal('emp-pag'); atualizarTelasEmp();
     aviso('Pagamento de ' + fmt(valor) + ' registrado.');
   } catch (err) {
     erroAmigavel(err, 'Não foi possível registrar o pagamento.');
@@ -1039,6 +1131,139 @@ async function removerMes(mid) {
   loading(false);
 }
 
+
+// ── atualizar a tela que estiver aberta ──
+function atualizarTelasEmp() {
+  renderEmpStats();
+  if (elx('p-emp-detail').classList.contains('active')) renderEmpDetail();
+  if (elx('p-emprestimos').classList.contains('active')) renderEmp();
+}
+
+// ── aba "Pagamentos do mês" ──
+function renderEmpMes() {
+  const el = elx('emp-mes');
+  if (!DB.tabelasOk) { el.innerHTML = '<div class="banner-aviso">As tabelas de meses e pagamentos ainda não existem no Supabase. Rode o arquivo <b>setup_emprestimos.sql</b>.</div>'; return; }
+  const empMap = new Map(DB.emprestimos.map(e => [e.id, e]));
+  // meses de empréstimo quitado só contam se já estavam pagos (histórico)
+  const validos = DB.meses.filter(m => { const e = empMap.get(m.emprestimo_id); return e && !(e.quitado && falta(m) > 0.004); });
+  const porMes = new Map();
+  validos.forEach(m => { const k = ym(m.competencia); if (!porMes.has(k)) porMes.set(k, []); porMes.get(k).push(m); });
+  const lista = [...porMes.keys()].sort().reverse();
+  if (!lista.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div>Nenhum mês lançado ainda</div>'; return; }
+  const atual = hojeISO().slice(0, 7);
+  if (!empMesSel || !porMes.has(empMesSel)) empMesSel = porMes.has(atual) ? atual : lista[0];
+
+  const soma = ms => ({ devido: r2(ms.reduce((s, m) => s + Number(m.valor_devido), 0)), pago: r2(ms.reduce((s, m) => s + Number(m.valor_pago), 0)) });
+  const ms = porMes.get(empMesSel), t = soma(ms), faltaT = r2(t.devido - t.pago);
+  const quitados = ms.filter(m => falta(m) <= 0.004), emAberto = ms.filter(m => falta(m) > 0.004);
+  const comParcial = emAberto.filter(m => Number(m.valor_pago) > 0.004).length;
+  const pct = t.devido > 0 ? Math.min(100, Math.round(t.pago / t.devido * 100)) : 0;
+  const ord = (a, b) => {
+    const ea = empMap.get(a.emprestimo_id), eb = empMap.get(b.emprestimo_id);
+    return (ea.dia_cobranca - eb.dia_cobranca) || ea.identificacao.localeCompare(eb.identificacao, 'pt-BR');
+  };
+
+  const linha = m => {
+    const e = empMap.get(m.emprestimo_id), { nome, resp } = splitIdent(e.identificacao), f = falta(m), pagou = Number(m.valor_pago) > 0.004, ok = f <= 0.004;
+    return `<div class="mes-row ${ok ? 'pago' : ''}">
+      <div style="cursor:pointer;min-width:0" onclick="openDetail('${e.id}')">
+        <div class="mes-nome">${esc(nome)}</div>
+        <div class="mes-sub">${resp ? 'Resp.: ' + esc(resp) + ' · ' : ''}Vence dia ${esc(e.dia_cobranca)} · Cobrança ${fmt(m.valor_devido)}${pagou && !ok ? ' · já pagou ' + fmt(m.valor_pago) : ''}${ok ? ' · recebido ' + fmt(m.valor_pago) : ''}</div>
+      </div>
+      <div class="mes-dir">
+        <span class="chip ${ok ? 'chip-pago' : pagou ? 'chip-parcial' : 'chip-aberto'}">${ok ? 'Pago' : pagou ? 'Pagou parte' : 'Em aberto'}</span>
+        ${ok ? '' : `<div class="mes-falta">Falta ${fmt(f)}</div><button class="btn btn-success btn-sm" style="margin-top:6px" onclick="abrirPagamentoMes('${m.id}')">Dar baixa</button>`}
+      </div>
+    </div>`;
+  };
+
+  el.innerHTML = `
+    <div class="mes-topo">
+      <select class="sel-mes" onchange="empMesSel=this.value;renderEmpMes()">
+        ${lista.map(k => `<option value="${k}" ${k === empMesSel ? 'selected' : ''}>${esc(mesLabel(k))}</option>`).join('')}
+      </select>
+      <span class="badge badge-pendente">${emAberto.length} ${emAberto.length === 1 ? 'devendo' : 'devendo'}</span>
+      <span class="badge badge-pago">${quitados.length} ${quitados.length === 1 ? 'pago' : 'pagos'}</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">A receber em ${esc(mesLabel(empMesSel))}</div><div class="stat-val">${fmt(t.devido)}</div></div>
+      <div class="stat-card"><div class="stat-label">Já recebido</div><div class="stat-val" style="color:var(--green-text)">${fmt(t.pago)}</div></div>
+      <div class="stat-card"><div class="stat-label">Falta receber</div><div class="stat-val" style="color:var(--red)">${fmt(faltaT)}</div></div>
+    </div>
+    <div class="barra" title="${pct}% recebido"><div style="width:${pct}%"></div></div>
+
+    <div class="sec-titulo">Devendo <small>${emAberto.length}${comParcial ? ` (${comParcial} com pagamento parcial)` : ''}</small></div>
+    ${emAberto.length ? emAberto.slice().sort(ord).map(linha).join('') : '<div class="vazio-sm">Ninguém devendo neste mês.</div>'}
+
+    <div class="sec-titulo">Pagos <small>${quitados.length}</small></div>
+    ${quitados.length ? quitados.slice().sort(ord).map(linha).join('') : '<div class="vazio-sm">Ninguém pagou este mês ainda.</div>'}
+
+    <div class="sec-titulo">Todos os meses <small>toque para abrir</small></div>
+    <div class="resumo-wrap">
+      <div class="resumo-linha cab"><span>Mês</span><span>A receber</span><span>Recebido</span><span>Falta</span></div>
+      ${lista.map(k => {
+        const s = soma(porMes.get(k)), f = r2(s.devido - s.pago);
+        return `<div class="resumo-linha ${k === empMesSel ? 'sel' : ''}" onclick="empMesSel='${k}';renderEmpMes();window.scrollTo(0,0)">
+          <span class="rl-mes">${esc(mesCurto(k + '-01'))}</span><span>${fmt(s.devido)}</span><span class="verde">${fmt(s.pago)}</span><span class="${f > 0.004 ? 'verm' : 'verde'}">${f > 0.004 ? fmt(f) : 'tudo pago'}</span></div>`;
+      }).join('')}
+    </div>`;
+}
+
+// ── editar dados do cliente ──
+function abrirEdicao() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const { nome, resp } = splitIdent(e.identificacao);
+  elx('ed-nome').value = nome; elx('ed-resp').value = resp; elx('ed-tel').value = e.telefone || '';
+  elx('ed-capital').value = Number(e.capital); elx('ed-dia').value = e.dia_cobranca; elx('ed-valor-cob').value = Number(e.valor_cobranca);
+  document.querySelector(`input[name="ed-mod"][value="${e.modalidade === 'PARCELADO' ? 'PARCELADO' : 'JUROS_SIMPLES'}"]`).checked = true;
+  elx('ed-aplicar').checked = false;
+  aoMudarModalidadeEdicao(); aoMudarValorEdicao();
+  openModal('emp-edit');
+}
+function aoMudarModalidadeEdicao() {
+  marcarOpcoes('ed-mod-opcoes');
+  const parc = document.querySelector('input[name="ed-mod"]:checked').value === 'PARCELADO';
+  elx('ed-valor-label').textContent = parc ? 'Valor de cada parcela (R$) *' : 'Valor do juros por mês (R$) *';
+}
+function aoMudarValorEdicao() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const novo = r2(elx('ed-valor-cob').value), antigo = r2(e.valor_cobranca);
+  const sem = DB.tabelasOk ? mesesDe(e.id).filter(m => falta(m) > 0.004 && Number(m.valor_pago) <= 0.004) : [];
+  const mostrar = novo > 0 && novo !== antigo && sem.length > 0;
+  elx('ed-aplicar-box').classList.toggle('hidden', !mostrar);
+  if (!mostrar) elx('ed-aplicar').checked = false;
+  else {
+    elx('ed-aplicar-txt').textContent = `${sem.length} ${sem.length === 1 ? 'mês sem nenhum pagamento passa' : 'meses sem nenhum pagamento passam'} de ${fmt(antigo)} para ${fmt(novo)}. Meses que já tiveram pagamento não mudam. Se deixar desmarcado, os meses já lançados ficam com o valor antigo e só os próximos usam o novo.`;
+    elx('ed-aplicar-box').classList.toggle('sel', elx('ed-aplicar').checked);
+  }
+}
+async function salvarEdicao() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const nome = elx('ed-nome').value.trim(), resp = elx('ed-resp').value;
+  const telefone = elx('ed-tel').value.replace(/\D/g, '');
+  const capital = r2(elx('ed-capital').value), dia = Math.trunc(Number(elx('ed-dia').value));
+  const valor = r2(elx('ed-valor-cob').value), modalidade = document.querySelector('input[name="ed-mod"]:checked').value;
+  if (!nome) return aviso('Escreva o nome do cliente.', 'erro');
+  if (!(capital > 0)) return aviso('Escreva o valor emprestado.', 'erro');
+  if (!(dia >= 1 && dia <= 31)) return aviso('O dia do vencimento precisa ser de 1 a 31.', 'erro');
+  if (!(valor > 0)) return aviso('Escreva o valor que ele paga por mês.', 'erro');
+  const patch = { identificacao: montarIdent(nome, resp), telefone, capital, dia_cobranca: dia, valor_cobranca: valor, modalidade };
+  const aplicar = elx('ed-aplicar').checked && !elx('ed-aplicar-box').classList.contains('hidden');
+  loading(true);
+  try {
+    await sbUpdate('emprestimos', e.id, patch);
+    Object.assign(e, patch);
+    if (aplicar) {
+      for (const m of mesesDe(e.id).filter(x => falta(x) > 0.004 && Number(x.valor_pago) <= 0.004)) {
+        await sbUpdate('emprestimo_meses', m.id, { valor_devido: valor });
+        m.valor_devido = valor;
+      }
+      await sincronizarEmp(e.id);
+    }
+    closeModal('emp-edit'); renderEmpDetail(); renderEmpStats(); aviso('Dados atualizados.');
+  } catch (err) { erroAmigavel(err, 'Não foi possível salvar as alterações.'); await recarregarEmprestimos(); }
+  loading(false);
+}
 // ─── ALUGUÉIS ───
 function renderAlugStats() {
   const ativos = DB.imoveis.filter(i => i.ativo!==false).length;
