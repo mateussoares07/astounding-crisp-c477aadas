@@ -83,6 +83,88 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-text{font-size:13px;color:var(--text2)}
   @media(max-width:500px){.home-grid{grid-template-columns:1fr}.sim-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}}
+
+  /* ═══════════ EMPRÉSTIMOS (visual maior e mais simples) ═══════════ */
+  .hidden{display:none!important}
+  .btn-lg{padding:11px 18px;font-size:15px;min-height:44px;justify-content:center}
+  .btn-xl{padding:14px 22px;font-size:17px;font-weight:600;min-height:54px;justify-content:center}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn-sm{padding:6px 12px;font-size:13px;min-height:34px}
+
+  .banner-aviso{background:var(--amber-bg);color:var(--amber-text);border:1px solid rgba(186,117,23,.35);border-radius:var(--radius);padding:12px 14px;margin-bottom:1rem;font-size:14px;line-height:1.5}
+
+  /* lista */
+  .emp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;cursor:pointer;transition:border-color .12s}
+  .emp-card:hover{border-color:var(--border2)}
+  .emp-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .emp-nome{font-size:17px;font-weight:600;line-height:1.25;word-break:break-word}
+  .emp-sub{font-size:13px;color:var(--text2);margin-top:3px}
+  .emp-deve{text-align:right;flex-shrink:0}
+  .emp-deve small{display:block;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+  .emp-deve strong{font-size:18px;color:var(--red);font-weight:600}
+  .emp-deve .em-dia{display:inline-block;background:var(--green-bg);color:var(--green-text);font-size:13px;font-weight:600;padding:5px 12px;border-radius:20px}
+  .emp-deve .quit{display:inline-block;background:var(--surface2);color:var(--text2);font-size:13px;font-weight:600;padding:5px 12px;border-radius:20px}
+  .emp-meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:13px;color:var(--text2)}
+  .emp-meta strong{color:var(--text);font-weight:500}
+
+  /* tela do cliente */
+  .hero{border-radius:var(--radius-lg);padding:1.25rem 1.4rem;margin-bottom:1rem}
+  .hero.devendo{background:var(--red-bg);color:var(--red-text)}
+  .hero.emdia{background:var(--green-bg);color:var(--green-text)}
+  .hero.quitado{background:var(--surface2);color:var(--text2)}
+  .hero-label{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;opacity:.85}
+  .hero-valor{font-size:34px;font-weight:600;letter-spacing:-.5px;margin:2px 0 4px;line-height:1.15}
+  .hero-sub{font-size:14px}
+  .acoes{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem}
+  .acoes .btn-xl{flex:1;min-width:220px}
+  .sec-titulo{font-size:16px;font-weight:600;margin:1.5rem 0 .75rem;display:flex;justify-content:space-between;align-items:baseline}
+  .sec-titulo small{font-size:13px;font-weight:400;color:var(--text2)}
+  .mes-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1.1rem;margin-bottom:8px}
+  .mes-row.pago{background:var(--surface2);border-color:transparent}
+  .mes-nome{font-size:16px;font-weight:600}
+  .mes-sub{font-size:13px;color:var(--text2);margin-top:2px}
+  .mes-dir{text-align:right;flex-shrink:0}
+  .mes-falta{font-size:15px;font-weight:600;color:var(--red);margin-top:4px}
+  .chip{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .chip-aberto{background:var(--red-bg);color:var(--red-text)}
+  .chip-parcial{background:var(--amber-bg);color:var(--amber-text)}
+  .chip-pago{background:var(--green-bg);color:var(--green-text)}
+  .link-sutil{background:none;border:none;color:var(--text2);font-size:12.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px 0;margin-top:2px}
+  .link-sutil:hover{color:var(--red-text)}
+  details.pagos-det{margin-top:.5rem}
+  details.pagos-det summary{cursor:pointer;font-size:14px;color:var(--text2);padding:8px 2px;font-weight:500}
+  .pag-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:.8rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px}
+  .pag-valor{font-size:16px;font-weight:600;color:var(--green-text)}
+  .pag-sub{font-size:13px;color:var(--text2);margin-top:2px}
+  .vazio-sm{color:var(--text3);font-size:14px;padding:.6rem .2rem}
+
+  /* formulários grandes */
+  .modal-lg{max-width:500px}
+  .modal-lg .field label{font-size:14px;color:var(--text);font-weight:600;margin-bottom:5px}
+  .modal-lg .field input,.modal-lg .field select{font-size:16px;padding:11px 12px;min-height:46px}
+  .modal-lg .modal-footer{position:sticky;bottom:-1.5rem;background:var(--surface);margin-bottom:-1.5rem;padding-bottom:1.5rem;z-index:2}
+  .dica{font-size:13px;color:var(--text2);margin-top:5px;line-height:1.4}
+  .passo{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;margin:1.6rem 0 .8rem;padding-top:1.1rem;border-top:1px solid var(--border)}
+  .passo:first-of-type{margin-top:.2rem;padding-top:0;border-top:none}
+  .passo span{width:24px;height:24px;border-radius:50%;background:var(--text);color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .duas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opcoes{display:flex;flex-direction:column;gap:8px;margin-bottom:.9rem}
+  .opcao{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--border2);border-radius:var(--radius);padding:12px 14px;cursor:pointer;background:var(--surface)}
+  .opcao input{width:20px;height:20px;margin-top:2px;accent-color:var(--text);flex-shrink:0}
+  .opcao b{display:block;font-size:15px;font-weight:600}
+  .opcao small{display:block;font-size:13px;color:var(--text2);margin-top:2px;line-height:1.4}
+  .opcao.sel{border-color:var(--text);background:var(--surface2)}
+  .previa{background:var(--surface2);border-radius:var(--radius);padding:12px 14px;font-size:14px;line-height:1.6;margin-top:.4rem}
+  .previa b{font-weight:600}
+  .previa .bad{color:var(--red-text);font-weight:600}
+  .previa .tot{font-size:16px;font-weight:600;color:var(--red-text);margin-top:4px}
+  .atalhos{display:flex;gap:8px;flex-wrap:wrap;margin:-.3rem 0 1rem}
+
+  /* aviso rápido */
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:13px 20px;border-radius:10px;font-size:15px;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:92vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.erro{background:#8d2f12}
+  @media(max-width:500px){.duas{grid-template-columns:1fr}.hero-valor{font-size:30px}.emp-deve strong{font-size:16px}}
 </style>
 </head>
 <body>
@@ -116,16 +198,18 @@
   <div class="nav">
     <button class="nav-back" onclick="goTo('home')">← Início</button>
     <span class="nav-title">Empréstimos</span>
-    <button class="btn btn-primary" onclick="openModal('emp')">+ Novo empréstimo</button>
+    <button class="btn btn-primary btn-lg" onclick="abrirNovoEmp()">+ Novo empréstimo</button>
   </div>
+  <div id="aviso-tabelas" class="banner-aviso hidden"></div>
   <div class="stats-row" id="emp-stats"></div>
   <div class="tabs">
     <button class="tab active" onclick="empTab('ativos',this)">Ativos</button>
-    <button class="tab" onclick="empTab('todos',this)">Todos</button>
+    <button class="tab" onclick="empTab('devendo',this)">Devendo</button>
     <button class="tab" onclick="empTab('quitados',this)">Quitados</button>
+    <button class="tab" onclick="empTab('todos',this)">Todos</button>
   </div>
   <div class="toolbar" id="emp-toolbar">
-    <input class="search-input" type="text" id="emp-search" placeholder="Buscar por identificação..." oninput="renderEmp()">
+    <input class="search-input" style="font-size:16px;padding:11px 14px" type="text" id="emp-search" placeholder="Buscar pelo nome..." oninput="renderEmp()">
   </div>
   <div id="emp-list" class="card-list"></div>
 </div>
@@ -165,31 +249,126 @@
   <div id="imov-detail-body"></div>
 </div>
 
-<!-- MODAL NOVO EMPRÉSTIMO (ATUALIZADO) -->
+<!-- MODAL NOVO EMPRÉSTIMO -->
 <div id="modal-emp" class="modal-overlay hidden">
-  <div class="modal">
+  <div class="modal modal-lg">
     <h2>Novo empréstimo</h2>
-    <div class="field"><label>Identificação (Nome - Responsável) *</label><input id="e-ident" type="text" placeholder="Ex: SORVETE - IRMAO SORVETE"></div>
-    <div class="field"><label>Telefone</label><input id="e-tel" type="text" placeholder="Ex: 77999757627"></div>
-    <div class="field"><label>Capital / Valor emprestado (R$) *</label><input id="e-capital" type="number" min="0" step="0.01"></div>
-    <div class="field"><label>Dia de Cobrança (1 a 31) *</label><input id="e-dia" type="number" min="1" max="31"></div>
-    <div class="field"><label>Valor da Cobrança Mensal / Parcela (R$) *</label><input id="e-valor-cob" type="number" min="0" step="0.01"></div>
-    <div class="field"><label>Modalidade</label>
-      <select id="e-mod">
-        <option value="JUROS_SIMPLES">Juros Simples Contínuo</option>
-        <option value="PARCELADO">Parcelado (Valor Fixo)</option>
-      </select>
+
+    <div class="passo"><span>1</span>Quem pegou o dinheiro?</div>
+    <div class="field">
+      <label for="e-nome">Nome *</label>
+      <input id="e-nome" type="text" autocomplete="off" placeholder="Ex: SORVETE">
     </div>
-    <div class="field"><label>Meses em atraso (Opcional)</label><input id="e-atraso" type="text" placeholder="Ex: 03, 04, 05"></div>
-    <div class="field"><label>Pagamento Parcial (R$ - Opcional)</label><input id="e-pag-parcial" type="number" min="0" step="0.01" value="0"></div>
-    <div class="field"><label>Saldo Devedor Acumulado (R$ - Opcional)</label><input id="e-saldo" type="number" min="0" step="0.01" value="0"></div>
-    
+    <div class="field">
+      <label for="e-resp">Responsável <span style="font-weight:400;color:var(--text2)">(só se for outra pessoa)</span></label>
+      <input id="e-resp" type="text" autocomplete="off" placeholder="Ex: IRMAO SORVETE">
+      <div class="dica">Se o responsável é a mesma pessoa, deixe vazio.</div>
+    </div>
+    <div class="field">
+      <label for="e-tel">Telefone com DDD</label>
+      <input id="e-tel" type="tel" inputmode="tel" autocomplete="off" placeholder="Ex: 77999757627">
+    </div>
+
+    <div class="passo"><span>2</span>Quanto e quando?</div>
+    <div class="duas">
+      <div class="field">
+        <label for="e-capital">Valor emprestado (R$) *</label>
+        <input id="e-capital" type="number" inputmode="decimal" min="0" step="0.01" oninput="previaNovo()">
+      </div>
+      <div class="field">
+        <label for="e-dia">Dia do vencimento (1 a 31) *</label>
+        <input id="e-dia" type="number" inputmode="numeric" min="1" max="31" step="1" placeholder="Ex: 10" oninput="aoMudarDia()">
+      </div>
+    </div>
+
+    <div class="passo"><span>3</span>Como ele paga?</div>
+    <div class="opcoes" id="e-mod-opcoes">
+      <label class="opcao sel"><input type="radio" name="e-mod" value="JUROS_SIMPLES" checked onchange="aoMudarModalidade()">
+        <span><b>Só os juros todo mês</b><small>Todo mês paga só o juros. O valor emprestado é devolvido de uma vez, no final.</small></span></label>
+      <label class="opcao"><input type="radio" name="e-mod" value="PARCELADO" onchange="aoMudarModalidade()">
+        <span><b>Parcelas fixas</b><small>Paga o mesmo valor todo mês, até terminar de pagar.</small></span></label>
+    </div>
+    <div class="field">
+      <label for="e-valor-cob" id="e-valor-cob-label">Valor do juros por mês (R$) *</label>
+      <input id="e-valor-cob" type="number" inputmode="decimal" min="0" step="0.01" oninput="previaNovo()">
+    </div>
+
+    <div class="passo"><span>4</span>Ele está devendo algum mês?</div>
+    <div class="opcoes" id="e-dev-opcoes">
+      <label class="opcao sel"><input type="radio" name="e-dev" value="nao" checked onchange="aoMudarDevendo()">
+        <span><b>Não, está em dia</b></span></label>
+      <label class="opcao"><input type="radio" name="e-dev" value="sim" onchange="aoMudarDevendo()">
+        <span><b>Sim, tem meses atrasados</b><small>O site cria os meses sozinho e soma o total.</small></span></label>
+    </div>
+    <div id="e-dev-box" class="hidden">
+      <div class="duas">
+        <div class="field">
+          <label for="e-de">Do mês</label>
+          <input id="e-de" type="month" oninput="previaNovo()">
+        </div>
+        <div class="field">
+          <label for="e-ate">Até o mês</label>
+          <input id="e-ate" type="month" oninput="e_ateManual=true;previaNovo()">
+        </div>
+      </div>
+      <div class="field">
+        <label for="e-pago">Ele já pagou alguma parte desse atraso? (R$)</label>
+        <input id="e-pago" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" oninput="previaNovo()">
+        <div class="dica">O valor é descontado do mês mais antigo primeiro.</div>
+      </div>
+      <div id="e-previa" class="previa"></div>
+    </div>
+
     <div class="modal-footer">
-      <button class="btn" onclick="closeModal('emp')">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarEmp()">Salvar</button>
+      <button class="btn btn-lg" onclick="closeModal('emp')">Cancelar</button>
+      <button class="btn btn-primary btn-lg" id="e-salvar" onclick="salvarEmp()">Salvar empréstimo</button>
     </div>
   </div>
 </div>
+
+<!-- MODAL REGISTRAR PAGAMENTO (EMPRÉSTIMO) -->
+<div id="modal-emp-pag" class="modal-overlay hidden">
+  <div class="modal modal-lg">
+    <h2>Registrar pagamento</h2>
+    <div class="previa" id="ep-resumo" style="margin:0 0 1.1rem"></div>
+    <div class="field">
+      <label for="ep-valor">Quanto ele pagou? (R$) *</label>
+      <input id="ep-valor" type="number" inputmode="decimal" min="0" step="0.01" oninput="previaPagamento()">
+    </div>
+    <div class="atalhos" id="ep-atalhos"></div>
+    <div class="field">
+      <label for="ep-data">Data do pagamento</label>
+      <input id="ep-data" type="date">
+    </div>
+    <div id="ep-previa" class="previa hidden"></div>
+    <div class="modal-footer">
+      <button class="btn btn-lg" onclick="closeModal('emp-pag')">Cancelar</button>
+      <button class="btn btn-success btn-lg" id="ep-confirmar" onclick="confirmarPagamento()">Confirmar pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LANÇAR MÊS (EMPRÉSTIMO) -->
+<div id="modal-emp-mes" class="modal-overlay hidden">
+  <div class="modal modal-lg">
+    <h2>Lançar mês em aberto</h2>
+    <p class="dica" style="margin:-.6rem 0 1rem">Use quando faltar algum mês na lista de meses devidos.</p>
+    <div class="field">
+      <label for="em-mes">Qual mês? *</label>
+      <input id="em-mes" type="month">
+    </div>
+    <div class="field">
+      <label for="em-valor">Valor desse mês (R$) *</label>
+      <input id="em-valor" type="number" inputmode="decimal" min="0" step="0.01">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-lg" onclick="closeModal('emp-mes')">Cancelar</button>
+      <button class="btn btn-primary btn-lg" onclick="confirmarLancarMes()">Lançar mês</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <!-- MODAL IMÓVEL -->
 <div id="modal-imov" class="modal-overlay hidden">
@@ -252,13 +431,23 @@ async function sbFetch(path, opts = {}) {
 }
 
 async function sbGet(table) { return sbFetch(table + '?select=*'); }
+// Busca TODAS as linhas (o Supabase devolve no máximo 1000 por consulta)
+async function sbGetAll(table) {
+  const out = [];
+  for (let off = 0; ; off += 1000) {
+    const rows = await sbFetch(table + '?select=*&order=id&limit=1000&offset=' + off);
+    out.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return out;
+}
 async function sbInsert(table, data) { return sbFetch(table, { method: 'POST', body: JSON.stringify(data) }); }
 async function sbUpdate(table, id, data) { return sbFetch(table + '?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(data) }); }
 async function sbDelete(table, id) { return sbFetch(table + '?id=eq.' + id, { method: 'DELETE', prefer: 'return=minimal' }); }
 async function sbDeleteWhere(table, col, val) { return sbFetch(table + '?' + col + '=eq.' + val, { method: 'DELETE', prefer: 'return=minimal' }); }
 
 // ─── STATE ───
-let DB = { emprestimos: [], imoveis: [], alugPags: [] };
+let DB = { emprestimos: [], imoveis: [], alugPags: [], meses: [], pagamentos: [], tabelasOk: false };
 let currentEmpId = null, currentAlugPagCtx = null, currentImovId = null;
 let empFilter = 'ativos', alugFilter = 'imoveis';
 let alugMesFiltro = today();
@@ -272,8 +461,9 @@ function loading(show) { document.getElementById('loading-overlay').classList.to
 async function loadAll() {
   loading(true);
   try {
-    const [emps, imovs, pags] = await Promise.all([sbGet('emprestimos'), sbGet('imoveis'), sbGet('alug_pags')]);
-    DB.emprestimos = emps; // Atualizado para o novo formato
+    const [emps, imovs, pags] = await Promise.all([sbGetAll('emprestimos'), sbGet('imoveis'), sbGet('alug_pags')]);
+    DB.emprestimos = emps;
+    await carregarMesesEPagamentos();
     DB.imoveis = imovs.map(i => ({ ...i, end: i.endereco }));
     DB.alugPags = pags.map(p => ({ ...p, imovelId: p.imovel_id, data: p.data_pag }));
   } catch(e) { alert('Erro ao carregar dados: ' + e.message); }
@@ -295,55 +485,263 @@ function openModal(id) {
 }
 function closeModal(id) { document.getElementById('modal-' + id).classList.add('hidden'); }
 
-// ─── EMPRÉSTIMOS (LÓGICA ATUALIZADA) ───
-async function salvarEmp() {
-  const identificacao = document.getElementById('e-ident').value.trim();
-  const telefone = document.getElementById('e-tel').value.trim();
-  const capital = document.getElementById('e-capital').value;
-  const dia_cobranca = document.getElementById('e-dia').value;
-  const valor_cobranca = document.getElementById('e-valor-cob').value;
-  const modalidade = document.getElementById('e-mod').value;
-  const meses_em_atraso = document.getElementById('e-atraso').value.trim();
-  const pagamento_parcial = document.getElementById('e-pag-parcial').value || 0;
-  const saldo_devedor_juros = document.getElementById('e-saldo').value || 0;
+// ─── EMPRÉSTIMOS ───────────────────────────────────────────────
+// Modelo: cada empréstimo tem uma linha por mês cobrado (emprestimo_meses).
+// O que falta pagar de um mês = valor_devido - valor_pago.
+// Total devendo = soma do que falta em todos os meses.
+// Pagamentos (emprestimo_pagamentos) abatem do mês MAIS ANTIGO primeiro.
+// Os campos saldo_devedor_juros / meses_em_atraso / pagamento_parcial da tabela
+// "emprestimos" são recalculados a cada alteração (é o que o robô do Telegram lê).
 
-  if (!identificacao || !capital || !dia_cobranca || !valor_cobranca) { 
-    alert('Preencha os campos obrigatórios (*).'); 
-    return; 
+const NOMES_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+let e_ateManual = false;
+let empEditarMeses = false;
+let toastTimer = null;
+
+// ── utilidades ──
+const r2 = v => Math.round((Number(v) || 0) * 100) / 100;
+const elx = id => document.getElementById(id);
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+function hojeISO() { // data de hoje no relógio do aparelho (não em UTC)
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function aviso(msg, tipo) {
+  const t = elx('toast');
+  t.textContent = msg;
+  t.className = 'show' + (tipo === 'erro' ? ' erro' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, tipo === 'erro' ? 6000 : 3200);
+}
+function erroAmigavel(e, contexto) {
+  console.error(contexto, e);
+  aviso(contexto + ' Confira a internet e tente de novo.', 'erro');
+}
+
+// ── nomes ──
+function splitIdent(s) {
+  s = String(s || '');
+  const i = s.indexOf(' - ');
+  return i < 0 ? { nome: s.trim(), resp: '' } : { nome: s.slice(0, i).trim(), resp: s.slice(i + 3).trim() };
+}
+function montarIdent(nome, resp) {
+  nome = nome.trim().replace(/\s+/g, ' ');
+  resp = resp.trim().replace(/\s+/g, ' ');
+  return (resp && resp.toLowerCase() !== nome.toLowerCase()) ? nome + ' - ' + resp : nome;
+}
+
+// ── meses ("YYYY-MM" ou "YYYY-MM-01") ──
+const ym = d => String(d).slice(0, 7);
+function addMes(ymStr, n) {
+  let [y, m] = ymStr.split('-').map(Number);
+  m += n; y += Math.floor((m - 1) / 12); m = ((m - 1) % 12 + 12) % 12 + 1;
+  return y + '-' + String(m).padStart(2, '0');
+}
+function ultimoDiaDoMes(ymStr) { const [y, m] = ymStr.split('-').map(Number); return new Date(y, m, 0).getDate(); }
+function mesesEntre(de, ate) { // quantidade de meses de 'de' até 'ate' (inclusive)
+  const [y1, m1] = de.split('-').map(Number), [y2, m2] = ate.split('-').map(Number);
+  return (y2 - y1) * 12 + (m2 - m1) + 1;
+}
+function mesLabel(c) { const [y, m] = String(c).split('-'); return NOMES_MESES[+m - 1] + '/' + y; }
+function mesCurto(c) { const [y, m] = String(c).split('-'); return m + '/' + y.slice(2); }
+function textoMeses(comps) { // ['2026-07-01','2026-08-01','2026-10-01'] -> "07/26 a 08/26, 10/26"
+  const out = []; let i = 0;
+  while (i < comps.length) {
+    let j = i;
+    while (j + 1 < comps.length && addMes(ym(comps[j]), 1) === ym(comps[j + 1])) j++;
+    out.push(i === j ? mesCurto(comps[i]) : mesCurto(comps[i]) + ' a ' + mesCurto(comps[j]));
+    i = j + 1;
   }
-  loading(true);
+  return out.join(', ');
+}
+function ultimoMesVencido(dia) { // último mês cujo vencimento já passou
+  const h = hojeISO(), mAtual = h.slice(0, 7);
+  const venc = Math.min(Number(dia) || 31, ultimoDiaDoMes(mAtual));
+  return (Number(h.slice(8, 10)) >= venc) ? mAtual : addMes(mAtual, -1);
+}
+
+// ── cálculo (fonte da verdade = meses) ──
+const falta = m => r2(Number(m.valor_devido) - Number(m.valor_pago));
+function mesesDe(empId) {
+  return DB.meses.filter(m => m.emprestimo_id === empId).sort((a, b) => a.competencia.localeCompare(b.competencia));
+}
+function resumoEmp(empId) {
+  const ms = mesesDe(empId);
+  const abertos = ms.filter(m => falta(m) > 0.004);
+  return {
+    ms, abertos,
+    pagos: ms.filter(m => falta(m) <= 0.004),
+    total: r2(abertos.reduce((s, m) => s + falta(m), 0)),
+    parcial: r2(abertos.reduce((s, m) => s + Number(m.valor_pago), 0))
+  };
+}
+function saldoDe(e) { return DB.tabelasOk ? resumoEmp(e.id).total : Number(e.saldo_devedor_juros || 0); }
+
+// Distribui um valor pelos meses em aberto, do mais antigo para o mais novo.
+function distribuir(abertosAsc, valor) {
+  let resto = r2(valor); const dist = [];
+  for (const m of abertosAsc) {
+    if (resto <= 0) break;
+    const v = Math.min(falta(m), resto);
+    if (v > 0) { dist.push({ mes_id: m.id, competencia: m.competencia, valor: r2(v) }); resto = r2(resto - v); }
+  }
+  return { dist, sobra: resto };
+}
+
+async function sincronizarEmp(id) {
+  const r = resumoEmp(id);
+  const patch = {
+    saldo_devedor_juros: r.total,
+    meses_em_atraso: textoMeses(r.abertos.map(m => m.competencia)),
+    pagamento_parcial: r.parcial
+  };
+  await sbUpdate('emprestimos', id, patch);
+  const e = DB.emprestimos.find(x => x.id === id);
+  if (e) Object.assign(e, patch);
+}
+
+async function carregarMesesEPagamentos() {
   try {
-    const rec = { 
-      identificacao, 
-      telefone,
-      capital: Number(capital), 
-      dia_cobranca: Number(dia_cobranca),
-      valor_cobranca: Number(valor_cobranca),
-      modalidade,
-      meses_em_atraso,
-      pagamento_parcial: Number(pagamento_parcial),
-      saldo_devedor_juros: Number(saldo_devedor_juros),
-      quitado: false 
-    };
-    
-    // O Supabase irá devolver o registro completo, incluindo o novo UUID gerado
-    const response = await sbInsert('emprestimos', rec);
-    
-    if(response && response.length > 0) {
-      DB.emprestimos.push(response[0]);
-    } else {
-      DB.emprestimos.push(rec); // fallback local
+    const [ms, ps] = await Promise.all([sbGetAll('emprestimo_meses'), sbGetAll('emprestimo_pagamentos')]);
+    DB.meses = ms; DB.pagamentos = ps; DB.tabelasOk = true;
+  } catch (e) {
+    console.warn('Tabelas de meses/pagamentos indisponíveis:', e);
+    DB.meses = []; DB.pagamentos = []; DB.tabelasOk = false;
+  }
+}
+async function recarregarEmprestimos() {
+  try {
+    DB.emprestimos = await sbGetAll('emprestimos');
+    await carregarMesesEPagamentos();
+  } catch (e) { console.error(e); }
+  renderEmpStats(); renderEmp();
+  if (elx('p-emp-detail').classList.contains('active')) renderEmpDetail();
+}
+
+// ── cadastro ──
+function marcarOpcoes(containerId) {
+  document.querySelectorAll('#' + containerId + ' .opcao').forEach(l => l.classList.toggle('sel', l.querySelector('input').checked));
+}
+const modalidadeEscolhida = () => document.querySelector('input[name="e-mod"]:checked').value;
+const devendoEscolhido = () => document.querySelector('input[name="e-dev"]:checked').value === 'sim';
+
+function abrirNovoEmp() {
+  ['e-nome','e-resp','e-tel','e-capital','e-dia','e-valor-cob','e-de','e-ate','e-pago'].forEach(i => elx(i).value = '');
+  document.querySelector('input[name="e-mod"][value="JUROS_SIMPLES"]').checked = true;
+  document.querySelector('input[name="e-dev"][value="nao"]').checked = true;
+  e_ateManual = false;
+  aoMudarModalidade(); aoMudarDevendo();
+  openModal('emp');
+}
+function aoMudarModalidade() {
+  marcarOpcoes('e-mod-opcoes');
+  elx('e-valor-cob-label').textContent = modalidadeEscolhida() === 'JUROS_SIMPLES'
+    ? 'Valor do juros por mês (R$) *' : 'Valor de cada parcela (R$) *';
+  previaNovo();
+}
+function aoMudarDia() {
+  if (devendoEscolhido() && !e_ateManual) elx('e-ate').value = ultimoMesVencido(elx('e-dia').value);
+  previaNovo();
+}
+function aoMudarDevendo() {
+  marcarOpcoes('e-dev-opcoes');
+  const sim = devendoEscolhido();
+  elx('e-dev-box').classList.toggle('hidden', !sim);
+  if (sim && !elx('e-ate').value) { elx('e-ate').value = ultimoMesVencido(elx('e-dia').value); e_ateManual = false; }
+  previaNovo();
+}
+function lerPeriodoNovo() { // devolve {meses:[...], erro}
+  const de = elx('e-de').value, ate = elx('e-ate').value;
+  if (!de || !ate) return { meses: [], erro: 'Escolha o mês inicial e o mês final.' };
+  const n = mesesEntre(de, ate);
+  if (n < 1) return { meses: [], erro: 'O mês inicial precisa ser antes do mês final.' };
+  if (n > 120) return { meses: [], erro: 'Período muito grande (mais de 120 meses). Confira as datas.' };
+  const meses = []; for (let i = 0; i < n; i++) meses.push(addMes(de, i));
+  return { meses, erro: '' };
+}
+function previaNovo() {
+  const box = elx('e-previa');
+  if (!devendoEscolhido()) { box.innerHTML = ''; return; }
+  const valor = r2(elx('e-valor-cob').value);
+  const { meses, erro } = lerPeriodoNovo();
+  if (erro) { box.innerHTML = '<span class="bad">' + esc(erro) + '</span>'; return; }
+  if (!(valor > 0)) { box.innerHTML = 'Preencha o valor por mês (passo 3) para ver o total.'; return; }
+  const pago = r2(elx('e-pago').value), bruto = r2(valor * meses.length);
+  let h = `<b>${meses.length}</b> ${meses.length === 1 ? 'mês' : 'meses'} (${esc(mesLabel(meses[0]))} a ${esc(mesLabel(meses[meses.length - 1]))}) × ${fmt(valor)} = <b>${fmt(bruto)}</b>`;
+  if (pago > 0) h += `<br>Já pagou: − ${fmt(pago)}`;
+  if (pago > bruto) h += `<br><span class="bad">O valor pago é maior que o total dos meses. Confira.</span>`;
+  else h += `<div class="tot">Total devendo: ${fmt(r2(bruto - pago))}</div>`;
+  box.innerHTML = h;
+}
+
+async function salvarEmp() {
+  const nome = elx('e-nome').value.trim(), resp = elx('e-resp').value;
+  const telefone = elx('e-tel').value.replace(/\D/g, '');
+  const capital = r2(elx('e-capital').value), dia = Math.trunc(Number(elx('e-dia').value));
+  const valor = r2(elx('e-valor-cob').value), modalidade = modalidadeEscolhida();
+  if (!nome) return aviso('Escreva o nome de quem pegou o empréstimo.', 'erro');
+  if (!(capital > 0)) return aviso('Escreva o valor emprestado.', 'erro');
+  if (!(dia >= 1 && dia <= 31)) return aviso('O dia do vencimento precisa ser de 1 a 31.', 'erro');
+  if (!(valor > 0)) return aviso('Escreva o valor que ele paga por mês.', 'erro');
+
+  const devendo = devendoEscolhido();
+  let meses = [], pago = 0;
+  if (devendo) {
+    if (!DB.tabelasOk) return aviso('Falta criar as tabelas novas no Supabase (rodar o arquivo SQL). Cadastre como "em dia" por enquanto.', 'erro');
+    const p = lerPeriodoNovo();
+    if (p.erro) return aviso(p.erro, 'erro');
+    meses = p.meses; pago = r2(elx('e-pago').value);
+    if (pago > r2(valor * meses.length)) return aviso('O valor já pago é maior que o total dos meses atrasados.', 'erro');
+  }
+
+  loading(true);
+  let novo = null;
+  try {
+    const res = await sbInsert('emprestimos', {
+      identificacao: montarIdent(nome, resp), telefone, capital, dia_cobranca: dia, valor_cobranca: valor,
+      modalidade, meses_em_atraso: '', pagamento_parcial: 0, saldo_devedor_juros: 0, quitado: false
+    });
+    novo = res[0];
+    DB.emprestimos.push(novo);
+
+    if (devendo) {
+      let resto = pago;
+      const linhas = meses.map(c => {
+        const abate = Math.min(valor, resto); resto = r2(resto - abate);
+        return { emprestimo_id: novo.id, competencia: c + '-01', valor_devido: valor, valor_pago: r2(abate) };
+      });
+      const criadas = await sbInsert('emprestimo_meses', linhas);
+      DB.meses.push(...criadas);
+      if (pago > 0) {
+        const dist = criadas.filter(m => Number(m.valor_pago) > 0)
+          .sort((a, b) => a.competencia.localeCompare(b.competencia))
+          .map(m => ({ mes_id: m.id, competencia: m.competencia, valor: Number(m.valor_pago) }));
+        const pg = await sbInsert('emprestimo_pagamentos', {
+          emprestimo_id: novo.id, data_pagamento: hojeISO(), valor: pago,
+          observacao: 'Já pago antes do cadastro', distribuicao: dist
+        });
+        DB.pagamentos.push(...pg);
+      }
+      await sincronizarEmp(novo.id);
     }
-    
     closeModal('emp');
-    ['e-ident','e-tel','e-capital','e-dia','e-valor-cob','e-atraso','e-pag-parcial','e-saldo'].forEach(i => document.getElementById(i).value = '');
-    document.getElementById('e-mod').value = 'JUROS_SIMPLES';
-    
+    aviso('Empréstimo cadastrado.');
     renderEmpStats(); renderEmp();
-  } catch(e) { alert('Erro ao salvar: ' + e.message); }
+  } catch (e) {
+    console.error(e);
+    if (novo) { // desfaz o cadastro pela metade
+      try { await sbDelete('emprestimos', novo.id); } catch (_) {}
+      DB.emprestimos = DB.emprestimos.filter(x => x.id !== novo.id);
+      DB.meses = DB.meses.filter(m => m.emprestimo_id !== novo.id);
+    }
+    aviso('Não foi possível salvar. Nada foi cadastrado. Confira a internet e tente de novo.', 'erro');
+  }
   loading(false);
 }
 
+// ── lista ──
 function empTab(f, el) {
   empFilter = f;
   document.querySelectorAll('#p-emprestimos .tab').forEach(t => t.classList.remove('active'));
@@ -353,92 +751,291 @@ function empTab(f, el) {
 
 function renderEmpStats() {
   const ativos = DB.emprestimos.filter(e => !e.quitado);
-  const total = ativos.length;
-  const captado = DB.emprestimos.reduce((s, e) => s + Number(e.capital), 0);
-  const receber = ativos.reduce((s, e) => s + Number(e.saldo_devedor_juros), 0);
-  document.getElementById('emp-stats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Ativos</div><div class="stat-val">${total}</div></div>
-    <div class="stat-card"><div class="stat-label">Capital Emprestado</div><div class="stat-val">${fmt(captado)}</div></div>
-    <div class="stat-card"><div class="stat-label">Saldo Acumulado (Atraso)</div><div class="stat-val" style="color:var(--red)">${fmt(receber)}</div></div>`;
+  const captado = ativos.reduce((s, e) => s + Number(e.capital), 0);
+  const receber = r2(ativos.reduce((s, e) => s + saldoDe(e), 0));
+  const devendo = ativos.filter(e => saldoDe(e) > 0.004).length;
+  elx('emp-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Empréstimos ativos</div><div class="stat-val">${ativos.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Valor emprestado</div><div class="stat-val">${fmt(captado)}</div></div>
+    <div class="stat-card"><div class="stat-label">Total atrasado (${devendo})</div><div class="stat-val" style="color:var(--red)">${fmt(receber)}</div></div>`;
+  const av = elx('aviso-tabelas');
+  av.classList.toggle('hidden', DB.tabelasOk);
+  if (!DB.tabelasOk) av.innerHTML = '<b>Atenção:</b> as tabelas de meses e pagamentos ainda não foram criadas no Supabase (ou não puderam ser lidas). Rode o arquivo <b>setup_emprestimos.sql</b> no Supabase e recarregue a página.';
 }
 
 function renderEmp() {
-  const q = (document.getElementById('emp-search').value || '').toLowerCase();
-  let list = DB.emprestimos.filter(e => (e.identificacao || '').toLowerCase().includes(q));
+  const q = (elx('emp-search').value || '').toLowerCase().trim();
+  let list = DB.emprestimos.filter(e => !q || (e.identificacao || '').toLowerCase().includes(q) || (e.telefone || '').includes(q));
   if (empFilter === 'ativos') list = list.filter(e => !e.quitado);
   if (empFilter === 'quitados') list = list.filter(e => e.quitado);
-  
-  // Ordena pelo dia de cobrança
-  list = list.slice().sort((a, b) => a.dia_cobranca - b.dia_cobranca);
-  
-  const el = document.getElementById('emp-list');
+  if (empFilter === 'devendo') list = list.filter(e => !e.quitado && saldoDe(e) > 0.004);
+  list = list.slice().sort((a, b) => (a.dia_cobranca - b.dia_cobranca) || (a.identificacao || '').localeCompare(b.identificacao || ''));
+
+  const el = elx('emp-list');
   if (!list.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">💸</div>Nenhum empréstimo encontrado</div>'; return; }
   el.innerHTML = list.map(e => {
-    return `<div class="item-card" onclick="openDetail('${e.id}')">
-      <div class="item-header">
-        <div><div class="item-name">${e.identificacao}</div><div class="item-sub">Dia de cobrança: ${e.dia_cobranca} · ${e.modalidade.replace('_', ' ')}</div></div>
-        <span class="badge badge-${e.quitado ? 'quitado' : 'ativo'}">${e.quitado ? 'Quitado' : 'Ativo'}</span>
+    const { nome, resp } = splitIdent(e.identificacao);
+    const saldo = saldoDe(e);
+    const lado = e.quitado ? '<span class="quit">Quitado</span>'
+      : saldo > 0.004 ? `<small>Está devendo</small><strong>${fmt(saldo)}</strong>`
+      : '<span class="em-dia">Em dia</span>';
+    const modTxt = e.modalidade === 'PARCELADO' ? 'Parcelas fixas' : 'Só juros';
+    return `<div class="emp-card" onclick="openDetail('${e.id}')">
+      <div class="emp-card-top">
+        <div><div class="emp-nome">${esc(nome)}</div>${resp ? `<div class="emp-sub">Responsável: ${esc(resp)}</div>` : ''}</div>
+        <div class="emp-deve">${lado}</div>
       </div>
-      <div class="item-meta">
-        <div class="meta-item">Capital<strong>${fmt(e.capital)}</strong></div>
-        <div class="meta-item">Cobrança Mensal<strong>${fmt(e.valor_cobranca)}</strong></div>
-        <div class="meta-item" style="color:var(--red)">Saldo Devedor<strong>${fmt(e.saldo_devedor_juros)}</strong></div>
+      <div class="emp-meta">
+        <span>Vence dia <strong>${esc(e.dia_cobranca)}</strong></span>
+        <span>Paga por mês <strong>${fmt(e.valor_cobranca)}</strong> <span style="color:var(--text3)">(${modTxt})</span></span>
+        <span>Emprestado <strong>${fmt(e.capital)}</strong></span>
       </div>
     </div>`;
   }).join('');
 }
 
+// ── tela do cliente ──
 function openDetail(id) {
   currentEmpId = id;
-  const emp = DB.emprestimos.find(x => x.id === id);
-  document.getElementById('detail-name').textContent = emp ? emp.identificacao : 'Detalhes';
+  empEditarMeses = false;
   goTo('emp-detail');
 }
 
 function renderEmpDetail() {
   const e = DB.emprestimos.find(x => x.id === currentEmpId);
   if (!e) return;
-  
-  document.getElementById('emp-detail-body').innerHTML = `
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-label">Capital</div><div class="stat-val">${fmt(e.capital)}</div></div>
-      <div class="stat-card"><div class="stat-label">Mensalidade</div><div class="stat-val">${fmt(e.valor_cobranca)}</div></div>
-      <div class="stat-card"><div class="stat-label">Saldo Acumulado</div><div class="stat-val" style="color:var(--red)">${fmt(e.saldo_devedor_juros)}</div></div>
+  const { nome, resp } = splitIdent(e.identificacao);
+  elx('detail-name').textContent = nome;
+  const body = elx('emp-detail-body');
+
+  if (!DB.tabelasOk) {
+    body.innerHTML = `<div class="banner-aviso">As tabelas de meses e pagamentos ainda não existem no Supabase. Rode o arquivo <b>setup_emprestimos.sql</b> e recarregue a página.</div>`;
+    return;
+  }
+
+  const r = resumoEmp(e.id);
+  const pags = DB.pagamentos.filter(p => p.emprestimo_id === e.id)
+    .sort((a, b) => b.data_pagamento.localeCompare(a.data_pagamento) || String(b.created_at || '').localeCompare(String(a.created_at || '')));
+  const devendo = r.total > 0.004;
+  const cls = e.quitado ? 'quitado' : devendo ? 'devendo' : 'emdia';
+  const rotulo = e.quitado ? 'Empréstimo quitado' : devendo ? 'Total que está devendo' : 'Está em dia';
+  const sub = e.quitado ? 'Este empréstimo foi encerrado.'
+    : devendo ? `${r.abertos.length} ${r.abertos.length === 1 ? 'mês em aberto' : 'meses em aberto'}: ${esc(textoMeses(r.abertos.map(m => m.competencia)))}`
+    : 'Nenhum mês em aberto.';
+  const modTxt = e.modalidade === 'PARCELADO' ? 'Parcelas fixas' : 'Só os juros todo mês';
+  const aberto = m => {
+    const f = falta(m), pagou = Number(m.valor_pago) > 0.004;
+    const podeRemover = !pagou && !geradoPeloRobo(e, m);
+    return `<div class="mes-row">
+      <div><div class="mes-nome">${esc(mesLabel(m.competencia))}</div>
+        <div class="mes-sub">Cobrança ${fmt(m.valor_devido)}${pagou ? ` · já pagou ${fmt(m.valor_pago)}` : ''}</div></div>
+      <div class="mes-dir"><span class="chip ${pagou ? 'chip-parcial' : 'chip-aberto'}">${pagou ? 'Pagou parte' : 'Em aberto'}</span>
+        <div class="mes-falta">Falta ${fmt(f)}</div>
+        ${(empEditarMeses && podeRemover) ? `<div style="margin-top:6px"><button class="btn btn-danger btn-sm" onclick="removerMes('${m.id}')">Remover este mês</button></div>` : ''}</div>
+    </div>`;
+  };
+  const pagoRow = m => `<div class="mes-row pago">
+      <div><div class="mes-nome" style="font-size:15px">${esc(mesLabel(m.competencia))}</div><div class="mes-sub">Cobrança ${fmt(m.valor_devido)}</div></div>
+      <div class="mes-dir"><span class="chip chip-pago">Pago</span></div></div>`;
+
+  body.innerHTML = `
+    <div class="hero ${cls}">
+      <div class="hero-label">${rotulo}</div>
+      <div class="hero-valor">${e.quitado ? '' : fmt(r.total)}</div>
+      <div class="hero-sub">${sub}</div>
     </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Valor emprestado</div><div class="stat-val">${fmt(e.capital)}</div></div>
+      <div class="stat-card"><div class="stat-label">${e.modalidade === 'PARCELADO' ? 'Parcela' : 'Juros por mês'}</div><div class="stat-val">${fmt(e.valor_cobranca)}</div></div>
+      <div class="stat-card"><div class="stat-label">Vence todo dia</div><div class="stat-val">${esc(e.dia_cobranca)}</div></div>
+    </div>
+    ${e.quitado ? '' : `<div class="acoes">
+      <button class="btn btn-success btn-xl" onclick="abrirPagamento()" ${devendo ? '' : 'disabled'}>💵 Registrar pagamento</button>
+      <button class="btn btn-lg" onclick="abrirLancarMes()">+ Lançar mês em aberto</button>
+    </div>`}
+
+    <div class="sec-titulo"><span>Meses em aberto <small>(${r.abertos.length})</small></span>
+      ${r.abertos.some(m => Number(m.valor_pago) <= 0.004 && !geradoPeloRobo(e, m)) ? `<button class="link-sutil" onclick="toggleEditarMeses()">${empEditarMeses ? 'pronto' : 'corrigir lista'}</button>` : ''}</div>
+    ${empEditarMeses ? '<div class="dica" style="margin:-.4rem 0 .7rem">Use só se algum mês foi lançado por engano.</div>' : ''}
+    ${r.abertos.length ? r.abertos.map(aberto).join('') : '<div class="vazio-sm">Nenhum mês em aberto.</div>'}
+    ${r.pagos.length ? `<details class="pagos-det"><summary>Meses já pagos (${r.pagos.length})</summary>${r.pagos.slice().reverse().map(pagoRow).join('')}</details>` : ''}
+
+    <div class="sec-titulo">Pagamentos recebidos <small>${pags.length}</small></div>
+    ${pags.length ? pags.map(p => `<div class="pag-row">
+        <div><div class="pag-valor">${fmt(p.valor)}</div>
+          <div class="pag-sub">${fmtDate(p.data_pagamento)}${p.observacao ? ' · ' + esc(p.observacao) : ''}${(p.distribuicao || []).length ? ' · abateu ' + esc(p.distribuicao.map(d => mesCurto(d.competencia)).join(', ')) : ''}</div></div>
+        <button class="btn btn-danger btn-sm" onclick="desfazerPagamento('${p.id}')">Desfazer</button>
+      </div>`).join('') : '<div class="vazio-sm">Nenhum pagamento registrado ainda.</div>'}
+
+    <div class="sec-titulo">Dados</div>
     <div class="detail-section">
-      <div class="detail-row"><span>Devedor / Responsável</span><span>${e.identificacao}</span></div>
-      <div class="detail-row"><span>Telefone</span><span>${e.telefone || '—'}</span></div>
-      <div class="detail-row"><span>Dia de Cobrança</span><span>${e.dia_cobranca}</span></div>
-      <div class="detail-row"><span>Modalidade</span><span>${e.modalidade.replace('_', ' ')}</span></div>
-      <div class="detail-row"><span>Meses em Atraso</span><span style="color:var(--red)">${e.meses_em_atraso || 'Nenhum'}</span></div>
-      <div class="detail-row"><span>Pagamento Parcial Acumulado</span><span style="color:var(--green)">${fmt(e.pagamento_parcial)}</span></div>
-      <div class="detail-row"><span>Status</span><span>${e.quitado ? '✅ Quitado' : '🟡 Em aberto'}</span></div>
+      <div class="detail-row"><span>Nome</span><span>${esc(nome)}</span></div>
+      ${resp ? `<div class="detail-row"><span>Responsável</span><span>${esc(resp)}</span></div>` : ''}
+      <div class="detail-row"><span>Telefone</span><span>${e.telefone ? `<a href="tel:${esc(e.telefone)}" style="color:inherit">${esc(e.telefone)}</a>` : '—'}</span></div>
+      <div class="detail-row"><span>Como paga</span><span>${modTxt}</span></div>
+      <div class="detail-row"><span>Situação</span><span>${e.quitado ? '✅ Quitado' : '🟡 Em andamento'}</span></div>
     </div>
     <div style="display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap">
-      ${!e.quitado ? `<button class="btn" onclick="quitarEmp('${e.id}')">✓ Marcar como quitado</button>` : ''}
-      <button class="btn btn-danger" onclick="excluirEmp('${e.id}')">🗑 Excluir empréstimo</button>
+      ${!e.quitado ? `<button class="btn btn-lg" onclick="quitarEmp('${e.id}')">✓ Marcar como quitado</button>` : ''}
+      <button class="btn btn-danger btn-lg" onclick="excluirEmp('${e.id}')">🗑 Excluir empréstimo</button>
     </div>`;
 }
 
+// O robô cria sozinho os meses cujo vencimento é a partir da data do cadastro.
+// Só esses não podem ser removidos à mão (voltariam no dia seguinte).
+function geradoPeloRobo(e, m) {
+  if (!e.criado_em) return false;
+  const c = ym(m.competencia);
+  const venc = c + '-' + String(Math.min(Number(e.dia_cobranca), ultimoDiaDoMes(c))).padStart(2, '0');
+  return venc >= String(e.criado_em).slice(0, 10);
+}
+
 async function quitarEmp(id) {
-  if (!confirm('Marcar como quitado?')) return;
+  const e = DB.emprestimos.find(x => x.id === id), total = saldoDe(e);
+  const msg = total > 0.004
+    ? `Este cliente ainda está devendo ${fmt(total)} em meses atrasados.\n\nMarcar como quitado mesmo assim?`
+    : 'O cliente devolveu todo o valor emprestado?\n\nMarcar este empréstimo como quitado?';
+  if (!confirm(msg)) return;
   loading(true);
   try {
     await sbUpdate('emprestimos', id, { quitado: true });
-    DB.emprestimos.find(x => x.id === id).quitado = true;
-    renderEmpDetail(); renderEmpStats();
-  } catch(e) { alert('Erro: ' + e.message); }
+    e.quitado = true;
+    renderEmpDetail(); renderEmpStats(); aviso('Empréstimo marcado como quitado.');
+  } catch (err) { erroAmigavel(err, 'Não foi possível marcar como quitado.'); }
   loading(false);
 }
 
 async function excluirEmp(id) {
-  if (!confirm('Excluir este empréstimo permanentemente?')) return;
+  const e = DB.emprestimos.find(x => x.id === id);
+  if (!confirm(`Excluir "${splitIdent(e.identificacao).nome}" para sempre?\n\nOs meses e os pagamentos dele também serão apagados. Isso não pode ser desfeito.`)) return;
   loading(true);
   try {
     await sbDelete('emprestimos', id);
     DB.emprestimos = DB.emprestimos.filter(x => x.id !== id);
-    goTo('emprestimos');
-  } catch(e) { alert('Erro: ' + e.message); }
+    DB.meses = DB.meses.filter(m => m.emprestimo_id !== id);
+    DB.pagamentos = DB.pagamentos.filter(p => p.emprestimo_id !== id);
+    goTo('emprestimos'); aviso('Empréstimo excluído.');
+  } catch (err) { erroAmigavel(err, 'Não foi possível excluir.'); }
+  loading(false);
+}
+
+// ── registrar pagamento ──
+function abrirPagamento() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const r = resumoEmp(e.id);
+  if (r.total <= 0.004) return aviso('Este cliente não tem nenhum mês em aberto.');
+  elx('ep-resumo').innerHTML = `<b>${esc(splitIdent(e.identificacao).nome)}</b> está devendo <b>${fmt(r.total)}</b> (${r.abertos.length} ${r.abertos.length === 1 ? 'mês' : 'meses'}).`;
+  const primeiro = falta(r.abertos[0]);
+  let at = `<button class="btn btn-sm" onclick="setValorPag(${primeiro})">Mês mais antigo (${fmt(primeiro)})</button>`;
+  if (r.abertos.length > 1) at += `<button class="btn btn-sm" onclick="setValorPag(${r.total})">Pagar tudo (${fmt(r.total)})</button>`;
+  elx('ep-atalhos').innerHTML = at;
+  elx('ep-valor').value = ''; elx('ep-data').value = hojeISO();
+  previaPagamento(); openModal('emp-pag');
+}
+function setValorPag(v) { elx('ep-valor').value = r2(v).toFixed(2); previaPagamento(); }
+
+function previaPagamento() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const box = elx('ep-previa'), btn = elx('ep-confirmar');
+  const valor = r2(elx('ep-valor').value);
+  if (!(valor > 0)) { box.classList.add('hidden'); btn.disabled = true; return; }
+  const r = resumoEmp(e.id), { dist, sobra } = distribuir(r.abertos, valor);
+  box.classList.remove('hidden');
+  if (sobra > 0) {
+    box.innerHTML = `<span class="bad">Esse valor é maior do que ele está devendo (${fmt(r.total)}). Confira o valor.</span>`;
+    btn.disabled = true; return;
+  }
+  const linhas = dist.map(d => {
+    const m = r.abertos.find(x => x.id === d.mes_id), resta = r2(falta(m) - d.valor);
+    return resta <= 0.004 ? `✓ Quita <b>${esc(mesLabel(d.competencia))}</b>`
+      : `Abate ${fmt(d.valor)} de <b>${esc(mesLabel(d.competencia))}</b> (ainda falta ${fmt(resta)})`;
+  });
+  box.innerHTML = linhas.join('<br>') + `<div class="tot">Depois disso, ele fica devendo ${fmt(r2(r.total - valor))}</div>`;
+  btn.disabled = false;
+}
+
+async function confirmarPagamento() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const valor = r2(elx('ep-valor').value), data = elx('ep-data').value;
+  if (!(valor > 0)) return aviso('Escreva quanto ele pagou.', 'erro');
+  if (!data) return aviso('Escolha a data do pagamento.', 'erro');
+  const r = resumoEmp(e.id), { dist, sobra } = distribuir(r.abertos, valor);
+  if (sobra > 0 || !dist.length) return aviso('Esse valor é maior do que ele está devendo.', 'erro');
+  loading(true);
+  try {
+    for (const d of dist) {
+      const m = DB.meses.find(x => x.id === d.mes_id), novo = r2(Number(m.valor_pago) + d.valor);
+      await sbUpdate('emprestimo_meses', m.id, { valor_pago: novo });
+      m.valor_pago = novo;
+    }
+    const pg = await sbInsert('emprestimo_pagamentos', { emprestimo_id: e.id, data_pagamento: data, valor, distribuicao: dist });
+    DB.pagamentos.push(pg[0]);
+    await sincronizarEmp(e.id);
+    closeModal('emp-pag'); renderEmpDetail(); renderEmpStats();
+    aviso('Pagamento de ' + fmt(valor) + ' registrado.');
+  } catch (err) {
+    erroAmigavel(err, 'Não foi possível registrar o pagamento.');
+    await recarregarEmprestimos();
+  }
+  loading(false);
+}
+
+async function desfazerPagamento(pid) {
+  const p = DB.pagamentos.find(x => x.id === pid); if (!p) return;
+  if (!confirm(`Desfazer o pagamento de ${fmt(p.valor)} do dia ${fmtDate(p.data_pagamento)}?\n\nEsse valor volta a ficar devendo.`)) return;
+  loading(true);
+  try {
+    for (const d of (p.distribuicao || [])) {
+      const m = DB.meses.find(x => x.id === d.mes_id); if (!m) continue;
+      const novo = r2(Math.max(0, Number(m.valor_pago) - Number(d.valor)));
+      await sbUpdate('emprestimo_meses', m.id, { valor_pago: novo });
+      m.valor_pago = novo;
+    }
+    await sbDelete('emprestimo_pagamentos', pid);
+    DB.pagamentos = DB.pagamentos.filter(x => x.id !== pid);
+    await sincronizarEmp(p.emprestimo_id);
+    renderEmpDetail(); renderEmpStats(); aviso('Pagamento desfeito.');
+  } catch (err) {
+    erroAmigavel(err, 'Não foi possível desfazer o pagamento.');
+    await recarregarEmprestimos();
+  }
+  loading(false);
+}
+
+// ── lançar / remover mês ──
+function abrirLancarMes() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  elx('em-mes').value = ''; elx('em-valor').value = Number(e.valor_cobranca).toFixed(2);
+  openModal('emp-mes');
+}
+async function confirmarLancarMes() {
+  const e = DB.emprestimos.find(x => x.id === currentEmpId); if (!e) return;
+  const mes = elx('em-mes').value, valor = r2(elx('em-valor').value);
+  if (!mes) return aviso('Escolha o mês.', 'erro');
+  if (!(valor > 0)) return aviso('Escreva o valor desse mês.', 'erro');
+  if (mes > hojeISO().slice(0, 7)) return aviso('Esse mês ainda não chegou. Escolha um mês até o atual.', 'erro');
+  if (DB.meses.some(m => m.emprestimo_id === e.id && ym(m.competencia) === mes)) return aviso('Esse mês já está na lista.', 'erro');
+  loading(true);
+  try {
+    const nova = await sbInsert('emprestimo_meses', { emprestimo_id: e.id, competencia: mes + '-01', valor_devido: valor, valor_pago: 0 });
+    DB.meses.push(...nova);
+    await sincronizarEmp(e.id);
+    closeModal('emp-mes'); renderEmpDetail(); renderEmpStats();
+    aviso(mesLabel(mes) + ' lançado.');
+  } catch (err) { erroAmigavel(err, 'Não foi possível lançar o mês.'); await recarregarEmprestimos(); }
+  loading(false);
+}
+function toggleEditarMeses() { empEditarMeses = !empEditarMeses; renderEmpDetail(); }
+async function removerMes(mid) {
+  const m = DB.meses.find(x => x.id === mid); if (!m) return;
+  if (!confirm(`Remover ${mesLabel(m.competencia)} da lista de meses em aberto?\n\nUse só se esse mês foi lançado por engano.`)) return;
+  loading(true);
+  try {
+    await sbDelete('emprestimo_meses', mid);
+    DB.meses = DB.meses.filter(x => x.id !== mid);
+    await sincronizarEmp(m.emprestimo_id);
+    renderEmpDetail(); renderEmpStats(); aviso('Mês removido.');
+  } catch (err) { erroAmigavel(err, 'Não foi possível remover o mês.'); await recarregarEmprestimos(); }
   loading(false);
 }
 
