@@ -122,11 +122,13 @@ async function buscarEmprestimosHoje(hoje) {
 
   const resultado = [];
   for (const e of doDia) {
-    let atraso;
+    let atraso, total, mesAtualPago = false;
     if (temMeses) {
       const doEmp = meses.filter(m => m.emprestimo_id === e.id);
       const emAberto = doEmp.filter(m => r2(m.valor_devido - m.valor_pago) > 0.004);
-      const total = r2(emAberto.reduce((s, m) => s + (m.valor_devido - m.valor_pago), 0));
+      total = r2(emAberto.reduce((s, m) => s + (m.valor_devido - m.valor_pago), 0));
+      const linhaHoje = doEmp.find(m => String(m.competencia).slice(0, 7) === competenciaHoje);
+      mesAtualPago = !!linhaHoje && r2(linhaHoje.valor_devido - linhaHoje.valor_pago) <= 0.004;
       // Atraso = o que ficou de meses ANTERIORES (a cobrança de hoje já aparece no valor principal).
       atraso = r2(emAberto.filter(m => String(m.competencia).slice(0, 7) < competenciaHoje)
                           .reduce((s, m) => s + (m.valor_devido - m.valor_pago), 0));
@@ -143,10 +145,87 @@ async function buscarEmprestimosHoje(hoje) {
       } catch (err) { console.warn('Aviso: não atualizei o resumo de', e.identificacao, err.message); }
     } else {
       atraso = r2(e.saldo_devedor_juros);
+      total = r2(atraso + Number(e.valor_cobranca));
     }
-    resultado.push({ identificacao: e.identificacao, cobranca: Number(e.valor_cobranca), atraso });
+    resultado.push({ identificacao: e.identificacao, capital: Number(e.capital), cobranca: Number(e.valor_cobranca), atraso, total, mesAtualPago });
   }
   return resultado.sort((a, b) => a.identificacao.localeCompare(b.identificacao, 'pt-BR'));
+}
+
+// ─── Aluguéis ───────────────────────────────────────────────
+// Devolve { hoje: [...], atrasados: [...] }.
+//  hoje      = aluguéis ativos que vencem hoje (com a marca "pago" se já foi dada baixa no mês)
+//  atrasados = aluguéis ativos cujo vencimento deste mês já passou e ainda não tiveram baixa
+async function buscarAlugueis(hoje) {
+  const competencia = `${hoje.ano}-${pad2(hoje.mes)}`;
+  const imoveis = await sb('imoveis?select=*&order=id');
+  const pagos = await sb(`alug_pags?select=imovel_id,mes,pago&mes=eq.${competencia}&pago=eq.true`);
+  const pagoNoMes = new Set(pagos.map(p => p.imovel_id));
+  const venceHoje = dia => Number(dia) === hoje.dia || (hoje.dia === ultimoDiaDoMes(hoje.ano, hoje.mes) && Number(dia) > hoje.dia);
+
+  const ativos = imoveis.filter(i => i.ativo !== false && String(i.inicio).slice(0, 7) <= competencia);
+  const porNome = (a, b) => a.inq.localeCompare(b.inq, 'pt-BR');
+  const lista = ativos.filter(i => venceHoje(i.dia)).map(i => ({ ...i, pago: pagoNoMes.has(i.id) })).sort(porNome);
+  const atrasados = ativos
+    .filter(i => vencimentoNoMes(i.dia, hoje.ano, hoje.mes) < hoje.dia && !pagoNoMes.has(i.id))
+    .map(i => ({ ...i, venceu: vencimentoNoMes(i.dia, hoje.ano, hoje.mes) }))
+    .sort((a, b) => a.venceu - b.venceu || porNome(a, b));
+  return { hoje: lista, atrasados };
+}
+
+// ─── Mensagem ───────────────────────────────────────────────
+function montarMensagem(hoje, emprestimos, alugueis) {
+  // Texto simples (sem parse_mode): nenhum caractere do nome pode quebrar a API do Telegram.
+  let m = `📅 Cobranças de Hoje (${pad2(hoje.dia)}/${pad2(hoje.mes)}/${hoje.ano})\n\n`;
+  let itens = 0;
+
+  if (emprestimos.length) {
+    m += `💰 EMPRÉSTIMOS QUE VENCEM HOJE:\n`;
+    emprestimos.forEach(e => {
+      m += `- ${e.identificacao}\n`;
+      m += `   Capital: ${brl(e.capital)}\n`;
+      m += `   Parcela do mês: ${brl(e.cobranca)}${e.mesAtualPago ? ' (já paga)' : ''}\n`;
+      m += `   Total devendo (com esta parcela): ${brl(e.total)}`;
+      if (e.atraso > 0) m += ` (atrasado de meses anteriores: ${brl(e.atraso)})`;
+      m += `\n`;
+      itens++;
+    });
+    m += `\n`;
+  }
+
+  if (alugueis.hoje.length) {
+    m += `🏠 ALUGUÉIS QUE VENCEM HOJE:\n`;
+    alugueis.hoje.forEach(i => {
+      m += `- ${i.inq} (${i.endereco}): ${brl(i.valor)}${i.pago ? ' - já pago' : ''}\n`;
+      itens++;
+    });
+    m += `\n`;
+  }
+
+  if (alugueis.atrasados.length) {
+    const soma = r2(alugueis.atrasados.reduce((s, i) => s + Number(i.valor), 0));
+    m += `⚠️ ALUGUÉIS ATRASADOS EM ${pad2(hoje.mes)}/${hoje.ano} (sem baixa):\n`;
+    alugueis.atrasados.forEach(i => {
+      m += `- ${i.inq} (${i.endereco}): ${brl(i.valor)} - venceu dia ${pad2(i.venceu)}\n`;
+      itens++;
+    });
+    m += `Total atrasado no mês: ${brl(soma)}\n\n`;
+  }
+
+  if (itens === 0) m += `Nenhuma cobrança agendada para hoje.`;
+  return m.trimEnd();
+}
+
+// O Telegram aceita até 4096 caracteres por mensagem: divide em blocos por linha se precisar.
+function dividir(texto, max = 3800) {
+  if (texto.length <= max) return [texto];
+  const blocos = []; let atual = '';
+  for (const linha of texto.split('\n')) {
+    if ((atual + '\n' + linha).length > max && atual) { blocos.push(atual); atual = linha; }
+    else atual = atual ? atual + '\n' + linha : linha;
+  }
+  if (atual) blocos.push(atual);
+  return blocos;
 }
 
 // ─── Principal ──────────────────────────────────────────────
@@ -158,51 +237,24 @@ async function run() {
   }
 
   const hoje = hojeEmBahia();
-  const venceHoje = dia => Number(dia) === hoje.dia || (hoje.dia === ultimoDiaDoMes(hoje.ano, hoje.mes) && Number(dia) > hoje.dia);
-
-  const emprestimosHoje = await buscarEmprestimosHoje(hoje);
-  const imoveis = await sb('imoveis?select=*');
-  const alugueisHoje = imoveis.filter(i => i.ativo !== false && venceHoje(i.dia));
-
-  // Texto simples (sem parse_mode): nenhum caractere do nome pode quebrar a API do Telegram.
-  let mensagem = `📅 Cobranças de Hoje (${pad2(hoje.dia)}/${pad2(hoje.mes)}/${hoje.ano})\n\n`;
-  let cobrancas = 0;
-
-  if (emprestimosHoje.length > 0) {
-    mensagem += `💰 EMPRÉSTIMOS:\n`;
-    emprestimosHoje.forEach(e => {
-      mensagem += `- ${e.identificacao}: ${brl(e.cobranca)}`;
-      if (e.atraso > 0) mensagem += ` (Atraso Acumulado: ${brl(e.atraso)})`;
-      mensagem += `\n`;
-      cobrancas++;
-    });
-    mensagem += `\n`;
-  }
-
-  if (alugueisHoje.length > 0) {
-    mensagem += `🏠 ALUGUÉIS:\n`;
-    alugueisHoje.forEach(i => {
-      mensagem += `- ${i.inq} (${i.endereco}): ${brl(i.valor)}\n`;
-      cobrancas++;
-    });
-    mensagem += `\n`;
-  }
-
-  if (cobrancas === 0) mensagem += `Nenhuma cobrança agendada para hoje.`;
-  mensagem = mensagem.trimEnd();
+  const emprestimos = await buscarEmprestimosHoje(hoje);
+  const alugueis = await buscarAlugueis(hoje);
+  const mensagem = montarMensagem(hoje, emprestimos, alugueis);
 
   console.log('Mensagem gerada. A enviar para o Telegram...');
   console.log(mensagem);
 
-  const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: mensagem })
-  });
-  const data = await response.json();
-  if (!data.ok) {
-    console.error('ERRO DO TELEGRAM:', data.description);
-    process.exit(1); // Faz a rotina falhar no GitHub para podermos ver o erro
+  for (const parte of dividir(mensagem)) {
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: parte })
+    });
+    const data = await response.json();
+    if (!data.ok) {
+      console.error('ERRO DO TELEGRAM:', data.description);
+      process.exit(1); // Faz a rotina falhar no GitHub para podermos ver o erro
+    }
   }
   console.log('Mensagem enviada com sucesso ao Telegram!');
 }
