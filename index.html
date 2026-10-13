@@ -1289,8 +1289,17 @@ function renderAlug() {
   else renderHistAlug(el);
 }
 
+// Último mês que conta como devido: imóvel ativo = mês atual; desligado = mês do desligamento (sem data = nenhum)
+function mesFinalImov(imov) {
+  const hoje = today().slice(0,7);
+  if (imov.ativo !== false) return hoje;
+  if (!imov.fim) return '';
+  const f = String(imov.fim).slice(0,7);
+  return f < hoje ? f : hoje;
+}
+
 function getPendentesImov(imov) {
-  const inicio = imov.inicio.slice(0,7), atual = today().slice(0,7);
+  const inicio = imov.inicio.slice(0,7), atual = mesFinalImov(imov);
   const pendentes = []; let cursor = inicio;
   while (cursor <= atual) {
     const pago = DB.alugPags.find(p => p.imovelId===imov.id && p.mes===cursor && p.pago);
@@ -1308,8 +1317,8 @@ function renderImoveis(el) {
     const pendentes = getPendentesImov(i);
     return `<div class="item-card" onclick="openImovDetail('${i.id}')">
       <div class="item-header">
-        <div><div class="item-name">${i.inq}</div><div class="item-sub">${i.end}</div></div>
-        <span class="badge ${pendentes.length>0?'badge-pendente':'badge-ativo'}">${pendentes.length>0?`${pendentes.length} pendente${pendentes.length>1?'s':''}`:'Em dia'}</span>
+        <div><div class="item-name">${i.inq}</div><div class="item-sub">${i.end}${i.ativo===false?' · desligado':''}</div></div>
+        <span class="badge ${pendentes.length>0?'badge-pendente':'badge-ativo'}">${pendentes.length>0?`${pendentes.length} pendente${pendentes.length>1?'s':''}`:(i.ativo===false?'Desligado':'Em dia')}</span>
       </div>
       <div class="item-meta">
         <div class="meta-item">Aluguel<strong>${fmt(i.valor)}</strong></div>
@@ -1331,7 +1340,7 @@ function openImovDetail(id) {
 function renderImovDetail() {
   const imov = DB.imoveis.find(i => i.id===currentImovId);
   if (!imov) return;
-  const inicio = imov.inicio.slice(0,7), atual = today().slice(0,7);
+  const inicio = imov.inicio.slice(0,7), atual = mesFinalImov(imov);
   const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   let mesesList = []; let cursor = inicio;
   while (cursor <= atual) {
@@ -1354,7 +1363,9 @@ function renderImovDetail() {
     </div>
     <div class="detail-section" style="margin-bottom:1.5rem">
       <div class="detail-row"><span>Inquilino</span><span>${imov.inq}</span></div>
-      <div class="detail-row"><span>Endereço</span><span>${imov.end}</span></div>
+      <div class="detail-row"><span>Endereço</span><span>${imov.end}</span></div>${imov.telefone?`
+      <div class="detail-row"><span>Telefone</span><span><a href="tel:${imov.telefone}" style="color:inherit">${imov.telefone}</a></span></div>`:''}${imov.ativo===false?`
+      <div class="detail-row"><span>Situação</span><span>Desligado</span></div>`:''}
       <div class="detail-row"><span>Vencimento</span><span>Dia ${imov.dia} de cada mês</span></div>
       <div class="detail-row"><span>Início do contrato</span><span>${fmtDate(imov.inicio)}</span></div>
     </div>
